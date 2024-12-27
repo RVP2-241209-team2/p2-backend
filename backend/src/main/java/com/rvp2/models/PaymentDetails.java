@@ -1,5 +1,6 @@
 package com.rvp2.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class PaymentDetails {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private User user;
 
     @Column(nullable = false)
@@ -31,4 +33,63 @@ public class PaymentDetails {
     @JoinColumn(name="address_id")
     private Address address;
 
+    public PaymentDetails() {
+    }
+
+    public PaymentDetails(UUID id, User user, String cardNumber, String cardHolderName, String expireDate, Address address) {
+        this.id = id;
+        this.user = user;
+        this.cardNumber = cardNumber;
+        this.cardHolderName = cardHolderName;
+        this.expireDate = expireDate;
+        this.address = address;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getCardHolderName() {
+        return cardHolderName;
+    }
+
+    public void setCardHolderName(String cardHolderName) {
+        this.cardHolderName = cardHolderName;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }
