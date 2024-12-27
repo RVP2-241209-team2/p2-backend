@@ -1,4 +1,4 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -33,16 +33,19 @@ public class PaymentDetails {
     @JoinColumn(name="address_id")
     private Address address;
 
+    private boolean isDefault;
+
     public PaymentDetails() {
     }
 
-    public PaymentDetails(UUID id, User user, String cardNumber, String cardHolderName, String expireDate, Address address) {
+    public PaymentDetails(UUID id, User user, String cardNumber, String cardHolderName, String expireDate, Address address, boolean isDefault) {
         this.id = id;
         this.user = user;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.expireDate = expireDate;
         this.address = address;
+        this.isDefault = isDefault;
     }
 
     public UUID getId() {
@@ -92,4 +95,8 @@ public class PaymentDetails {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public boolean getIsDefault() { return isDefault; }
+
+    public void setIsDefault(boolean isDefault) { this.isDefault = isDefault; }
 }

@@ -1,7 +1,8 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rvp2.shoply.models.enums.OrderStatus;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     @JsonIgnore
     private User user;
@@ -34,7 +35,7 @@ public class Order {
     private double total;
 
     @Column(nullable = false)
-    private String status;
+    private OrderStatus status;
 
     @Column(nullable = false)
     private String date;
@@ -46,7 +47,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(UUID id, User user, Address shippingAddress, PaymentDetails paymentDetails, double total, String status, String date, List<OrderItem> orderItems) {
+    public Order(UUID id, User user, Address shippingAddress, PaymentDetails paymentDetails, double total, OrderStatus status, String date, List<OrderItem> orderItems) {
         this.id = id;
         this.user = user;
         this.shippingAddress = shippingAddress;
@@ -97,11 +98,11 @@ public class Order {
         this.total = total;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
