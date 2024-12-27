@@ -1,1 +1,0 @@
-### ShopLy - A eCommerce app

@@ -1,10 +1,10 @@
-package com.rvp2.server;
+package com.revature.shoply;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServerApplicationTests {
+class ShoplyApplicationTests {
 
 	@Test
 	void contextLoads() {
