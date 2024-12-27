@@ -1,4 +1,4 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;

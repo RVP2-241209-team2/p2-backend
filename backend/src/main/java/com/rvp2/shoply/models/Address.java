@@ -1,6 +1,7 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rvp2.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -38,12 +39,12 @@ public class Address {
     private String country;
 
     @Column(nullable = false)
-    private String type;
+    private AddressType type;
 
     public Address() {
     }
 
-    public Address(UUID id, User user, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, String type) {
+    public Address(UUID id, User user, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
         this.id = id;
         this.user = user;
         this.addressLine1 = addressLine1;
@@ -119,11 +120,11 @@ public class Address {
         this.country = country;
     }
 
-    public String getType() {
+    public AddressType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(AddressType type) {
         this.type = type;
     }
 }

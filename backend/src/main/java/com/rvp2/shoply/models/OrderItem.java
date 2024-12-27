@@ -1,6 +1,5 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -8,16 +7,16 @@ import java.util.UUID;
 
 @Component
 @Entity
-@Table(name = "cart_items")
-public class CartItem {
+@Table(name = "order_items")
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="cart_id")
-    private Cart cart;
+    @JoinColumn(name="order_id")
+    private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="product_id")
@@ -29,12 +28,13 @@ public class CartItem {
     @Column(nullable = false)
     private double total;
 
-    public CartItem() {
+
+    public OrderItem() {
     }
 
-    public CartItem(UUID id, Cart cart, Product product, int quantity, double total) {
+    public OrderItem(UUID id, Order order, Product product, int quantity, double total) {
         this.id = id;
-        this.cart = cart;
+        this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.total = total;
@@ -48,12 +48,12 @@ public class CartItem {
         this.id = id;
     }
 
-    public Cart getCart() {
-        return cart;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {

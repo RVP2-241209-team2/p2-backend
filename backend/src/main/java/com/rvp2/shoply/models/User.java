@@ -1,9 +1,8 @@
-package com.rvp2.models;
+package com.rvp2.shoply.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rvp2.shoply.models.enums.UserRole;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.processing.Pattern;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,9 +34,7 @@ public class User {
 
     private String phoneNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="role_id")
-    private Role role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("user")
@@ -55,14 +52,14 @@ public class User {
     @JsonIgnoreProperties("user")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("user")
-    private List<Cart> carts;
+    private Cart cart;
 
     public User() {
     }
 
-    public User(UUID id, String username, String firstName, String lastName, String email, String password, String phoneNumber, Role role) {
+    public User(UUID id, String username, String firstName, String lastName, String email, String password, String phoneNumber, UserRole role) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -129,13 +126,9 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public Role getRole() {
-        return role;
-    }
+    public UserRole getRole() { return role; }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    public void setRole(UserRole role) { this.role = role; }
 
     public List<Address> getAddresses() {
         return addresses;
@@ -169,12 +162,12 @@ public class User {
         this.orders = orders;
     }
 
-    public List<Cart> getCarts() {
-        return carts;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     @Override
@@ -192,7 +185,7 @@ public class User {
                 ", paymentDetails=" + paymentDetails +
                 ", reviews=" + reviews +
                 ", orders=" + orders +
-                ", carts=" + carts +
+                ", cart=" + cart +
                 '}';
     }
 }
