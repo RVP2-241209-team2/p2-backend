@@ -1,4 +1,4 @@
-package com.rvp2.shoply.models.enums;
+package com.revature.shoply.models.enums;
 
 public enum OrderStatus {
     PENDING,

@@ -1,7 +1,7 @@
-package com.rvp2.shoply.models;
+package com.revature.shoply.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rvp2.shoply.models.enums.AddressType;
+import com.revature.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
