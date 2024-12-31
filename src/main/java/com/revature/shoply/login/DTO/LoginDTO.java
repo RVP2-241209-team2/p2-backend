@@ -1,4 +1,4 @@
-package com.revature.shoply.models.DTOs;
+package com.revature.shoply.login.DTO;
 
 /**
  * Data Transfer Object (DTO) for encapsulating user login credentials.

@@ -1,8 +1,8 @@
 package com.revature.shoply.login.controller;
 
 import com.revature.shoply.login.service.LoginService;
-import com.revature.shoply.models.DTOs.LoginDTO;
-import com.revature.shoply.models.DTOs.OutgoingUserDTO;
+import com.revature.shoply.login.DTO.LoginDTO;
+import com.revature.shoply.login.DTO.OutgoingLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +31,12 @@ public class LoginController {
      * if the login is successful.
      *
      * @param loginDTO The {@link LoginDTO} object containing the login credentials (e.g., username and password).
-     * @return A {@link ResponseEntity} containing an {@link OutgoingUserDTO} object representing the logged-in user's details.
+     * @return A {@link ResponseEntity} containing an {@link OutgoingLoginDTO} object representing the logged-in user's details.
      *         Returns an HTTP 200 (OK) status if the login is successful.
      */
     @PostMapping
-    public ResponseEntity<OutgoingUserDTO> login(@RequestBody LoginDTO loginDTO){
-        OutgoingUserDTO loggedInUser = loginService.login(loginDTO);
+    public ResponseEntity<OutgoingLoginDTO> login(@RequestBody LoginDTO loginDTO){
+        OutgoingLoginDTO loggedInUser = loginService.login(loginDTO);
 
         return ResponseEntity.ok(loggedInUser);
     }
