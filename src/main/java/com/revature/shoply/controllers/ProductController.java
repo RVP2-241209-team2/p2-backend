@@ -14,7 +14,7 @@ import com.revature.shoply.models.Product;
 import com.revature.shoply.services.ProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("api/v1/products")
 public class ProductController {
 
 
