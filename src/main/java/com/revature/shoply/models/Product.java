@@ -30,17 +30,22 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductTag> tags;
 
+    @Column(nullable = false)
+    private double rating; 
+
     public Product() {
     }
 
-    public Product(UUID id, String name, String description, double price, int quantity) {
+    public Product(UUID id, String name, String description, double price, int quantity, double rating) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+        this.rating = rating; 
     }
 
+    // Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -87,5 +92,13 @@ public class Product {
 
     public void setTags(List<ProductTag> tags) {
         this.tags = tags;
+    }
+
+    public double getRating() {
+        return rating; // Getter for rating
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating; // Setter for rating
     }
 }
