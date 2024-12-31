@@ -17,25 +17,24 @@ import com.revature.shoply.services.ProductService;
 @RequestMapping("api/v1/products")
 public class ProductController {
 
-
-
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
-    public  ProductController(ProductService  productService){ this.productService = productService;}
-
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody Product productDetails) {
-
         Product updatedProduct = productService.updateProduct(
                 id,
                 productDetails.getName(),
                 productDetails.getDescription(),
-                productDetails.getPrice()
+                productDetails.getPrice(),
+                productDetails.getRating(),
+                productDetails.getQuantity() 
         );
 
         return ResponseEntity.ok(updatedProduct);
     }
-    
 }
