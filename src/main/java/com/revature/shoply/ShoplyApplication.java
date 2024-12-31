@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication
-@EntityScan("com.revature.models")
+@EntityScan("com.revature.shoply.models")
 @ComponentScan("com.revature")
 public class ShoplyApplication {
 
