@@ -66,8 +66,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}/addresses/{addressId}")
-    ResponseEntity<Map<String, String>> deleteAddress(@PathVariable UUID addressId){
-        boolean isSuccess = userService.deleteAddress(addressId);
+    ResponseEntity<Map<String, String>> deleteAddress(@PathVariable UUID userId, @PathVariable UUID addressId){
+        boolean isSuccess = userService.deleteAddress(userId, addressId);
 
         if(isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Address deleted!"));
@@ -95,8 +95,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}/payment-methods/{payMethodId}")
-    ResponseEntity<Map<String, String>> deletePaymentMethod(@PathVariable UUID payMethodId){
-        boolean isSuccess = userService.deletePayMethod(payMethodId);
+    ResponseEntity<Map<String, String>> deletePaymentMethod(@PathVariable UUID userId, @PathVariable UUID payMethodId){
+        boolean isSuccess = userService.deletePayMethod(userId, payMethodId);
 
         if(isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Payment method deleted!"));

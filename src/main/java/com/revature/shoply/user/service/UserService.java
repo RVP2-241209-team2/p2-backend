@@ -170,8 +170,9 @@ public class UserService {
         return addressDAO.save(newAddress);
     }
 
-    public boolean deleteAddress(UUID addressId){
+    public boolean deleteAddress(UUID userId, UUID addressId){
 
+        User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(addressId);
         if(foundAddress != null) {
             if (!addressDAO.existsById(addressId)) {
@@ -233,8 +234,9 @@ public class UserService {
     }
 
 
-    public boolean deletePayMethod(UUID payMethodId){
+    public boolean deletePayMethod(UUID userId, UUID payMethodId){
 
+        User foundUser = findUserByIdAndValidate(userId);
         if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
 
         if (!paymentMethodDAO.existsById(payMethodId)) {
