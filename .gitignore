@@ -212,4 +212,4 @@ hs_err_pid*
 replay_pid*
 
 # Test Package containing controller, repository etc
-main/java/com/reavture/shoply/test/
+src/main/java/com/revature/shoply/test/
