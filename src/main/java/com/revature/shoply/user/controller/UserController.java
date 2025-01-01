@@ -1,10 +1,8 @@
 package com.revature.shoply.user.controller;
 
 import com.revature.shoply.models.Address;
-import com.revature.shoply.user.DTO.IncomingAddressDTO;
-import com.revature.shoply.user.DTO.IncomingUserDTO;
-import com.revature.shoply.user.DTO.OutgoingAddressDTO;
-import com.revature.shoply.user.DTO.OutgoingUserDTO;
+import com.revature.shoply.models.PaymentDetails;
+import com.revature.shoply.user.DTO.*;
 import com.revature.shoply.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +71,35 @@ public class UserController {
 
         if(isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Address deleted!"));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Something went wrong!"));
+    }
+
+
+
+    @GetMapping("/{userId}/payment-methods")
+    ResponseEntity<List<PaymentDetails>> getPaymentMethods(@PathVariable UUID userId){
+        return ResponseEntity.ok(userService.getPaymentMethods(userId));
+    }
+
+
+    @PostMapping("/{userId}/payment-methods")
+    ResponseEntity<PaymentDetails> addPaymentMethod(@RequestBody IncomingPayDetailsDTO payment, @PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.addPayMethod(userId, payment));
+    }
+
+    @PutMapping("/{userId}/payment-methods/{payMethodId}")
+    ResponseEntity<PaymentDetails> updatePaymentMethod(@RequestBody IncomingPayDetailsDTO payment, @PathVariable UUID userId, @PathVariable UUID payMethodId){
+        return ResponseEntity.ok(userService.updatePayMethod(userId, payMethodId, payment));
+    }
+
+    @DeleteMapping("/{userId}/payment-methods/{payMethodId}")
+    ResponseEntity<Map<String, String>> deletePaymentMethod(@PathVariable UUID payMethodId){
+        boolean isSuccess = userService.deletePayMethod(payMethodId);
+
+        if(isSuccess) {
+            return ResponseEntity.ok(Collections.singletonMap("message", "Payment method deleted!"));
         }
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Something went wrong!"));

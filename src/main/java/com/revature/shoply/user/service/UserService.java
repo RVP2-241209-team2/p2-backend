@@ -1,12 +1,11 @@
 package com.revature.shoply.user.service;
 
 import com.revature.shoply.models.Address;
+import com.revature.shoply.models.PaymentDetails;
 import com.revature.shoply.models.User;
-import com.revature.shoply.user.DTO.IncomingAddressDTO;
-import com.revature.shoply.user.DTO.IncomingUserDTO;
-import com.revature.shoply.user.DTO.OutgoingAddressDTO;
-import com.revature.shoply.user.DTO.OutgoingUserDTO;
+import com.revature.shoply.user.DTO.*;
 import com.revature.shoply.user.repository.AddressDAO;
+import com.revature.shoply.user.repository.PaymentMethodDAO;
 import com.revature.shoply.user.repository.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,14 @@ import java.util.*;
 public class UserService {
     private final UserDAO userDAO;
     private final AddressDAO addressDAO;
+    private final PaymentMethodDAO paymentMethodDAO;
+
 
     @Autowired
-    public UserService(UserDAO userDAO, AddressDAO addressDAO) {
+    public UserService(UserDAO userDAO, AddressDAO addressDAO, PaymentMethodDAO paymentMethodDAO) {
         this.userDAO = userDAO;
         this.addressDAO = addressDAO;
+        this.paymentMethodDAO = paymentMethodDAO;
     }
 
     public User findUserByIdAndValidate(UUID userId){
@@ -181,5 +183,66 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+
+
+    //Payment methods
+
+    public List<PaymentDetails> getPaymentMethods(UUID userId){
+        User foundUser = findUserByIdAndValidate(userId);
+        return paymentMethodDAO.findByUserId(userId);
+    }
+
+
+    public PaymentDetails addPayMethod(UUID userId, IncomingPayDetailsDTO payMethod){
+        User foundUser = findUserByIdAndValidate(userId);
+        Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
+
+        PaymentDetails newPaymentMethod = new PaymentDetails(
+                null,
+                foundUser,
+                payMethod.getCardNumber(),
+                payMethod.getCardHolderName(),
+                payMethod.getExpireDate(),
+                foundAddress,
+                payMethod.getIsDefault()
+        );
+
+        return paymentMethodDAO.save(newPaymentMethod);
+    }
+
+    public PaymentDetails updatePayMethod(UUID userId, UUID payMethodId, IncomingPayDetailsDTO payMethod){
+        User foundUser = findUserByIdAndValidate(userId);
+        Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
+
+        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
+        Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
+        if(foundPayMethod.isEmpty()) throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
+
+        PaymentDetails newPayMethod = foundPayMethod.get();
+
+        newPayMethod.setCardNumber(payMethod.getCardNumber());
+        newPayMethod.setCardHolderName(payMethod.getCardHolderName());
+        newPayMethod.setExpireDate(payMethod.getExpireDate());
+        newPayMethod.setAddress(foundAddress);
+        newPayMethod.setUser(foundUser);
+        newPayMethod.setIsDefault(payMethod.getIsDefault());
+
+        return paymentMethodDAO.save(newPayMethod);
+    }
+
+
+    public boolean deletePayMethod(UUID payMethodId){
+
+        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
+
+        if (!paymentMethodDAO.existsById(payMethodId)) {
+            throw new IllegalArgumentException("Payment Method with ID " + payMethodId + " does not exist.");
+        }
+
+        paymentMethodDAO.deleteById(payMethodId);
+
+        return true;
     }
 }
