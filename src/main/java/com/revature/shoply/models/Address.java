@@ -42,7 +42,7 @@ public class Address {
     @Column(nullable = false)
     private AddressType type;
 
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<PaymentDetails> paymentDetails;
 
