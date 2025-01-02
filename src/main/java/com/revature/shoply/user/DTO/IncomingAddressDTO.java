@@ -1,57 +1,26 @@
-package com.revature.shoply.models;
+package com.revature.shoply.user.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.shoply.models.User;
 import com.revature.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
-@Component
-@Entity
-@Table(name = "addresses")
-public class Address {
+public class IncomingAddressDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    @JsonIgnore
-    private User user;
-
-    @Column(nullable = false)
     private String addressLine1;
-
     private String addressLine2;
-
-    @Column(nullable = false)
     private String city;
-
-    @Column(nullable = false)
     private String state;
-
-    @Column(nullable = false)
     private String zipCode;
-
-    @Column(nullable = false)
     private String country;
-
-    @Column(nullable = false)
     private AddressType type;
 
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    private List<PaymentDetails> paymentDetails;
-
-    public Address() {
+    public IncomingAddressDTO() {
     }
 
-    public Address(UUID id, User user, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
-        this.id = id;
-        this.user = user;
+    public IncomingAddressDTO(String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;
@@ -61,27 +30,13 @@ public class Address {
         this.type = type;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getAddressLine1() {
         return addressLine1;
     }
 
     public void setAddressLine1(String addressLine1) {
+
+        if(addressLine1 == null || addressLine1.isBlank()) throw new IllegalArgumentException("Address Line 1 cannot be blank or null");
         this.addressLine1 = addressLine1;
     }
 
@@ -98,6 +53,7 @@ public class Address {
     }
 
     public void setCity(String city) {
+        if(city == null || city.isBlank()) throw new IllegalArgumentException("City cannot be blank or null");
         this.city = city;
     }
 
@@ -106,6 +62,7 @@ public class Address {
     }
 
     public void setState(String state) {
+        if(state == null || state.isBlank()) throw new IllegalArgumentException("State cannot be blank or null");
         this.state = state;
     }
 
@@ -114,6 +71,7 @@ public class Address {
     }
 
     public void setZipCode(String zipCode) {
+        if(zipCode == null || zipCode.isBlank()) throw new IllegalArgumentException("ZipCode cannot be blank or null");
         this.zipCode = zipCode;
     }
 
@@ -122,6 +80,7 @@ public class Address {
     }
 
     public void setCountry(String country) {
+        if(country == null || country.isBlank()) throw new IllegalArgumentException("Country cannot be blank or null");
         this.country = country;
     }
 
@@ -130,14 +89,7 @@ public class Address {
     }
 
     public void setType(AddressType type) {
+        if(type == null) throw new IllegalArgumentException("Address Type cannot be blank or null");
         this.type = type;
-    }
-
-    public List<PaymentDetails> getPaymentDetails() {
-        return paymentDetails;
-    }
-
-    public void setPaymentDetails(List<PaymentDetails> paymentDetails) {
-        this.paymentDetails = paymentDetails;
     }
 }

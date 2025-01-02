@@ -1,57 +1,27 @@
-package com.revature.shoply.models;
+package com.revature.shoply.user.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.shoply.models.enums.AddressType;
-import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
-@Component
-@Entity
-@Table(name = "addresses")
-public class Address {
+public class OutgoingAddressDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    @JsonIgnore
-    private User user;
-
-    @Column(nullable = false)
+    private UUID userId;
     private String addressLine1;
-
     private String addressLine2;
-
-    @Column(nullable = false)
     private String city;
-
-    @Column(nullable = false)
     private String state;
-
-    @Column(nullable = false)
     private String zipCode;
-
-    @Column(nullable = false)
     private String country;
-
-    @Column(nullable = false)
     private AddressType type;
 
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    private List<PaymentDetails> paymentDetails;
-
-    public Address() {
+    public OutgoingAddressDTO() {
     }
 
-    public Address(UUID id, User user, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
+    public OutgoingAddressDTO(UUID id, UUID userId, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
         this.id = id;
-        this.user = user;
+        this.userId = userId;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;
@@ -69,12 +39,12 @@ public class Address {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getAddressLine1() {
@@ -131,13 +101,5 @@ public class Address {
 
     public void setType(AddressType type) {
         this.type = type;
-    }
-
-    public List<PaymentDetails> getPaymentDetails() {
-        return paymentDetails;
-    }
-
-    public void setPaymentDetails(List<PaymentDetails> paymentDetails) {
-        this.paymentDetails = paymentDetails;
     }
 }
