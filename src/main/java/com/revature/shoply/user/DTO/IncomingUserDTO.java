@@ -1,49 +1,32 @@
-package com.revature.shoply.models.DTOs;
+package com.revature.shoply.user.DTO;
 
 import com.revature.shoply.models.enums.UserRole;
 
 import java.util.UUID;
 
 
-/**
- * Data Transfer Object (DTO) for representing user information sent from the server to the client.
- *
- * This class is used to encapsulate the details of a user after authentication or other user-related operations.
- * It includes the user's ID, username, first name, last name, and role.
- * This object is specifically designed for outgoing responses, ensuring sensitive information such as passwords
- * is excluded.
- */
-public class OutgoingUserDTO {
-    private UUID id;
+public class IncomingUserDTO {
     private String username;
+    private String email;
     private String firstname;
     private String lastname;
-    private UserRole role;
+    private String phoneNumber;
 
 
     //Constructors
 
-    public OutgoingUserDTO() {
+    public IncomingUserDTO() {
     }
 
-    public OutgoingUserDTO(UUID id, String username, String firstname, String lastname, UserRole role) {
-        this.id = id;
+    public IncomingUserDTO(String username, String email, String firstname, String lastname, String phoneNumber) {
         this.username = username;
+        this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.role = role;
+        this.phoneNumber = phoneNumber;
     }
 
-
-    // Getters and Setters
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
+// Getters and Setters
 
     public String getUsername() {
         return username;
@@ -69,24 +52,29 @@ public class OutgoingUserDTO {
         this.lastname = lastname;
     }
 
-    public UserRole getRole() {
-        return role;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     //ToString
     @Override
     public String toString() {
         return "OutgoingUserDTO{" +
-                "id=" + id +
                 ", username='" + username + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", role=" + role +
                 '}';
     }
 }

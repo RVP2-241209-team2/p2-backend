@@ -1,8 +1,8 @@
 package com.revature.shoply.login.service;
 
 import com.revature.shoply.login.repository.LoginDAO;
-import com.revature.shoply.models.DTOs.LoginDTO;
-import com.revature.shoply.models.DTOs.OutgoingUserDTO;
+import com.revature.shoply.login.DTO.LoginDTO;
+import com.revature.shoply.login.DTO.OutgoingLoginDTO;
 import com.revature.shoply.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,16 @@ public class LoginService {
      *
      * This method takes in a {@link LoginDTO} object containing the username and password,
      * validates the input, and retrieves the corresponding user from the data source.
-     * If the credentials are valid, it returns an {@link OutgoingUserDTO} object with
+     * If the credentials are valid, it returns an {@link OutgoingLoginDTO} object with
      * the user's details. Otherwise, it throws an exception.
      *
      * @param loginDTO A {@link LoginDTO} object containing the username and password for authentication.
-     * @return An {@link OutgoingUserDTO} object containing the authenticated user's details,
+     * @return An {@link OutgoingLoginDTO} object containing the authenticated user's details,
      *         such as ID, username, first name, last name, and role.
      * @throws IllegalArgumentException If the username or password is blank, or if no user is found
      *                                  with the provided credentials.
      */
-    public OutgoingUserDTO login(LoginDTO loginDTO){
+    public OutgoingLoginDTO login(LoginDTO loginDTO){
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 
@@ -48,7 +48,7 @@ public class LoginService {
 
         if(user == null) throw new IllegalArgumentException("No user found with those credentials");
 
-        return new OutgoingUserDTO(
+        return new OutgoingLoginDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFirstName(),
