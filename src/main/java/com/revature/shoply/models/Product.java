@@ -26,17 +26,22 @@ public class Product {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(nullable = false)
+    private double rating; 
+
     public Product() {
     }
 
-    public Product(UUID id, String name, String description, double price, int quantity) {
+    public Product(UUID id, String name, String description, double price, int quantity, double rating) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+        this.rating = rating; 
     }
 
+    // Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -75,5 +80,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getRating() {
+        return rating; // Getter for rating
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating; // Setter for rating
     }
 }
