@@ -5,6 +5,7 @@ import com.revature.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -40,6 +41,10 @@ public class Address {
 
     @Column(nullable = false)
     private AddressType type;
+
+    @OneToMany(mappedBy = "address", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<PaymentDetails> paymentDetails;
 
     public Address() {
     }
@@ -126,5 +131,13 @@ public class Address {
 
     public void setType(AddressType type) {
         this.type = type;
+    }
+
+    public List<PaymentDetails> getPaymentDetails() {
+        return paymentDetails;
+    }
+
+    public void setPaymentDetails(List<PaymentDetails> paymentDetails) {
+        this.paymentDetails = paymentDetails;
     }
 }
