@@ -3,6 +3,7 @@ package com.revature.shoply.models;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -25,6 +26,9 @@ public class Product {
 
     @Column(nullable = false)
     private int quantity;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductTag> tags;
 
     public Product() {
     }
@@ -75,5 +79,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public List<ProductTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<ProductTag> tags) {
+        this.tags = tags;
     }
 }

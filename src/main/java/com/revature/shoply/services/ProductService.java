@@ -1,5 +1,6 @@
 package com.revature.shoply.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,5 +34,8 @@ public class ProductService {
             throw new RuntimeException("Product not found with id: " + id);
         }
     }
-    
+
+    public List<Product> getProductsByTag(String name) {
+        return productDAO.findByTags_TagName(name);
+    }
 }

@@ -1,20 +1,17 @@
 package com.revature.shoply.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.revature.shoply.models.Product;
 import com.revature.shoply.services.ProductService;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("api/public/v1/products")
 public class ProductController {
 
 
@@ -36,6 +33,11 @@ public class ProductController {
         );
 
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @GetMapping("/tag/{name}")
+    public ResponseEntity<List<Product>> getProductsByTag(@PathVariable String name) {
+        return ResponseEntity.ok(productService.getProductsByTag(name));
     }
     
 }
