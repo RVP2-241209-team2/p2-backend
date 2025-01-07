@@ -1,7 +1,7 @@
 package com.revature.shoply.cart.service;
 
 import com.revature.shoply.cart.repository.CartDAO;
-import com.revature.shoply.Repositories.ProductDAO;
+import com.revature.shoply.product.repository.ProductDAO;
 import com.revature.shoply.Repositories.UserDAO;
 import com.revature.shoply.models.Cart;
 import com.revature.shoply.models.CartItem;

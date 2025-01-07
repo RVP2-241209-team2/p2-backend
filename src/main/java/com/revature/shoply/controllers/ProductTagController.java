@@ -2,8 +2,8 @@ package com.revature.shoply.controllers;
 
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.Tag;
-import com.revature.shoply.services.ProductService;
-import com.revature.shoply.services.ProductTagService;
+import com.revature.shoply.product.service.ProductService;
+import com.revature.shoply.product.service.ProductTagService;
 import com.revature.shoply.services.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
