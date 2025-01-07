@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface TagDAO extends JpaRepository<Tag, UUID> {
-    Optional<Tag> findByTagName(String name);
+    Optional<Tag> findByName(String name);
 }

@@ -15,21 +15,17 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "tag_name", unique = true, nullable = false)
-    private String tagName;
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
 
     @OneToMany(mappedBy = "tag")
-    private List<Product> products;
-
-    @OneToMany(mappedBy = "tag")
-    private List<Tag> tags;
+    private List<ProductTag> productTags;
 
     public Tag() {
-        super();
     }
 
-    public Tag(String tagName) {
-        this.tagName = tagName;
+    public Tag(String name) {
+        this.name = name;
     }
 
     public UUID getId() {
@@ -40,11 +36,19 @@ public class Tag {
         this.id = id;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getName() {
+        return name;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setName(String tagName) {
+        this.name = tagName;
+    }
+
+    public List<ProductTag> getProductTags() {
+        return productTags;
+    }
+
+    public void setProductTags(List<ProductTag> productTags) {
+        this.productTags = productTags;
     }
 }

@@ -31,13 +31,13 @@ public class ProductTagService {
         Product product = productDAO.findById(productId).orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
         productTag.setProduct(product);
 
-        Optional<Tag> tag = tagDAO.findByTagName(tagName);
+        Optional<Tag> tag = tagDAO.findByName(tagName);
 
         if (tag.isPresent()) {
             productTag.setTag(tag.get());
         } else {
             Tag newTag = new Tag();
-            newTag.setTagName(tagName);
+            newTag.setName(tagName);
             newTag = tagDAO.save(newTag);
             productTag.setTag(newTag);
         }
