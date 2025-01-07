@@ -25,7 +25,7 @@ public class TagService {
     }
 
     public Tag getTagByName(String tagName) {
-        return tagDAO.findByTagName(tagName).orElseThrow(() -> new RuntimeException("Tag not found"));
+        return tagDAO.findByName(tagName).orElseThrow(() -> new RuntimeException("Tag not found"));
     }
 
     public Tag addTag(Tag tag) {
@@ -34,7 +34,7 @@ public class TagService {
 
     public Tag updateTag(Tag tag) {
         Tag existingTag = tagDAO.findById(tag.getId()).orElseThrow(() -> new RuntimeException("Tag not found"));
-        existingTag.setTagName(tag.getTagName());
+        existingTag.setName(tag.getName());
         return tagDAO.save(existingTag);
     }
 
