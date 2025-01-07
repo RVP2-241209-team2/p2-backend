@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/cart")
+@RequestMapping("/api/customers/cart")
 public class CartController {
     private final CartService cartService;
 
@@ -29,7 +29,7 @@ public class CartController {
         cartService.DeleteCartItemById(cartItemId);
         return ResponseEntity.ok(null);
     }
-    
+
     @PostMapping
     public ResponseEntity<Cart> addToCart(@RequestBody IncomingCartItemDTO cartItemDTO) {
         return ResponseEntity.ok(cartService.addToCart(cartItemDTO));
