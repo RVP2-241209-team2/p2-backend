@@ -54,5 +54,14 @@ public class ProductService {
             } else throw new ProductRepositoryException("A product with that name already exists");
         } else throw new ProductRegistrationException("Invalid product details: mismatched properties");
     }
-    
+
+    public int removeProduct(UUID productId) {
+        // 1. ensure product exists
+        Optional<Product> existingProduct = productRepository.findById(productId);
+        if (existingProduct.isPresent()) {
+            // 2. delete
+            productRepository.deleteById(productId);
+            return 1;
+        } else return 0;
+    }
 }
