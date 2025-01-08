@@ -63,5 +63,14 @@ public class ProductService {
         }
         return null;
     }
-    
+
+    public int removeProduct(UUID productId) {
+        // 1. ensure product exists
+        Optional<Product> existingProduct = productDAO.findById(productId);
+        if (existingProduct.isPresent()) {
+            // 2. delete
+            productDAO.deleteById(productId);
+            return 1;
+        } else return 0;
+    }
 }

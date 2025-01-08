@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,11 @@ public class ProductController {
     @GetMapping("/tag/{name}")
     public ResponseEntity<List<Product>> getProductsByTag(@PathVariable String name) {
         return ResponseEntity.ok(productService.getProductsByTag(name));
+    }
+
+    @DeleteMapping("/{productId}")
+    public int removeProduct(@PathVariable UUID productId) {
+        return productService.removeProduct(productId);
     }
 
 }
