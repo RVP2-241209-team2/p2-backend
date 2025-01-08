@@ -20,18 +20,21 @@ public class OutgoingLoginDTO {
     private String lastname;
     private UserRole role;
 
+    private String token;
+
 
     //Constructors
 
     public OutgoingLoginDTO() {
     }
 
-    public OutgoingLoginDTO(UUID id, String username, String firstname, String lastname, UserRole role) {
+    public OutgoingLoginDTO(UUID id, String username, String firstname, String lastname, UserRole role, String token) {
         this.id = id;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.role = role;
+        this.token = token;
     }
 
 
@@ -77,6 +80,13 @@ public class OutgoingLoginDTO {
         this.role = role;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     //ToString
     @Override
