@@ -108,6 +108,18 @@ public class UserService {
     }
 
 
+    public boolean deleteUser(UUID userId){
+        User foundUser = findUserByIdAndValidate(userId);
+
+        if(foundUser == null) {
+            return false;
+        } else {
+            userDAO.deleteById(userId);
+            return true;
+        }
+    }
+
+
     public boolean updateUserPassword(UUID userId, String oldPassword, String newPassword){
         if(oldPassword == null || oldPassword.isBlank()){
             throw new IllegalArgumentException("Old password cannot be blank or null");
