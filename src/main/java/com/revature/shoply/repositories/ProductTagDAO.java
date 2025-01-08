@@ -1,4 +1,4 @@
-package com.revature.shoply.Repositories;
+package com.revature.shoply.repositories;
 
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.ProductTag;

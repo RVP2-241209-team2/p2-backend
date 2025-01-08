@@ -1,4 +1,4 @@
-package com.revature.shoply.Repositories;
+package com.revature.shoply.repositories;
 
 import com.revature.shoply.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;

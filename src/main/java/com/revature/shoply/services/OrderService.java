@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.shoply.Repositories.OrderDAO;
+import com.revature.shoply.repositories.OrderDAO;
 import com.revature.shoply.models.Order;
 
 @Service

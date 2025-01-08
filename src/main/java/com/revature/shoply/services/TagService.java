@@ -1,6 +1,6 @@
 package com.revature.shoply.services;
 
-import com.revature.shoply.Repositories.TagDAO;
+import com.revature.shoply.repositories.TagDAO;
 import com.revature.shoply.models.Tag;
 import org.springframework.stereotype.Service;
 

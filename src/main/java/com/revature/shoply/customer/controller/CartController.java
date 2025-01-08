@@ -1,8 +1,8 @@
-package com.revature.shoply.cart.controller;
+package com.revature.shoply.customer.controller;
 
 import com.revature.shoply.models.Cart;
-import com.revature.shoply.cart.service.CartService;
-import com.revature.shoply.cart.DTOs.IncomingCartItemDTO;
+import com.revature.shoply.customer.service.CartService;
+import com.revature.shoply.customer.DTOs.IncomingCartItemDTO;
 import com.revature.shoply.login.service.LoginService;
 
 

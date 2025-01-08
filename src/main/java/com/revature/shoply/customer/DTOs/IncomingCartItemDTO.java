@@ -1,4 +1,4 @@
-package com.revature.shoply.cart.DTOs;
+package com.revature.shoply.customer.DTOs;
 
 import java.util.UUID;
 

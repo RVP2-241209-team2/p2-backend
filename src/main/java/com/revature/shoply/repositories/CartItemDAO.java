@@ -1,4 +1,4 @@
-package com.revature.shoply.cart.repository;
+package com.revature.shoply.repositories;
 
 import java.util.UUID;
 

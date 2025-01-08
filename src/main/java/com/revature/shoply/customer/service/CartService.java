@@ -1,11 +1,11 @@
-package com.revature.shoply.cart.service;
+package com.revature.shoply.customer.service;
 
-import com.revature.shoply.cart.repository.CartDAO;
+import com.revature.shoply.repositories.CartDAO;
 import com.revature.shoply.product.repository.ProductDAO;
-import com.revature.shoply.Repositories.UserDAO;
+import com.revature.shoply.repositories.UserDAO;
 import com.revature.shoply.models.Cart;
 import com.revature.shoply.models.CartItem;
-import com.revature.shoply.cart.DTOs.IncomingCartItemDTO;
+import com.revature.shoply.customer.DTOs.IncomingCartItemDTO;
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.User;
 import org.springframework.beans.factory.annotation.Autowired;

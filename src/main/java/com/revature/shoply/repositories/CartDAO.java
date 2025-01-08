@@ -1,4 +1,4 @@
-package com.revature.shoply.cart.repository;
+package com.revature.shoply.repositories;
 
 import com.revature.shoply.models.Cart;
 import org.springframework.stereotype.Repository;
