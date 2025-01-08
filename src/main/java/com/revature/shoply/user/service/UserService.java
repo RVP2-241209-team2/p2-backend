@@ -44,6 +44,14 @@ public class UserService {
         return foundAddress.get();
     }
 
+    public PaymentDetails findPayMethodByIdAndValidate(UUID payMethodId){
+        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
+        Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
+        if(foundPayMethod.isEmpty()) throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
+
+        return foundPayMethod.get();
+    }
+
 
     public OutgoingUserDTO getUserInfo(UUID userId){
         User foundUser = findUserByIdAndValidate(userId);
@@ -191,16 +199,15 @@ public class UserService {
 
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(addressId);
-        if(foundAddress != null) {
-            if (!addressDAO.existsById(addressId)) {
-                throw new IllegalArgumentException("Address with ID " + addressId + " does not exist.");
-            }
 
-            addressDAO.deleteById(addressId);
-
-            return true;
+        for(PaymentDetails paymentDetails: foundAddress.getPaymentDetails()){
+            paymentDetails.setAddress(null);
+            paymentMethodDAO.save(paymentDetails);
         }
-        return false;
+
+        addressDAO.deleteById(addressId);
+
+        return true;
     }
 
 
@@ -233,33 +240,26 @@ public class UserService {
     public PaymentDetails updatePayMethod(UUID userId, UUID payMethodId, IncomingPayDetailsDTO payMethod){
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
+        PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);
 
-        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
-        Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
-        if(foundPayMethod.isEmpty()) throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
+        foundPayMethod.setCardNumber(payMethod.getCardNumber());
+        foundPayMethod.setCardHolderName(payMethod.getCardHolderName());
+        foundPayMethod.setExpireDate(payMethod.getExpireDate());
+        foundPayMethod.setAddress(foundAddress);
+        foundPayMethod.setUser(foundUser);
+        foundPayMethod.setIsDefault(payMethod.getIsDefault());
 
-        PaymentDetails newPayMethod = foundPayMethod.get();
-
-        newPayMethod.setCardNumber(payMethod.getCardNumber());
-        newPayMethod.setCardHolderName(payMethod.getCardHolderName());
-        newPayMethod.setExpireDate(payMethod.getExpireDate());
-        newPayMethod.setAddress(foundAddress);
-        newPayMethod.setUser(foundUser);
-        newPayMethod.setIsDefault(payMethod.getIsDefault());
-
-        return paymentMethodDAO.save(newPayMethod);
+        return paymentMethodDAO.save(foundPayMethod);
     }
 
 
     public boolean deletePayMethod(UUID userId, UUID payMethodId){
 
         User foundUser = findUserByIdAndValidate(userId);
-        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
+        PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);
 
-        if (!paymentMethodDAO.existsById(payMethodId)) {
-            throw new IllegalArgumentException("Payment Method with ID " + payMethodId + " does not exist.");
-        }
-
+        foundPayMethod.setAddress(null);
+        paymentMethodDAO.save(foundPayMethod);
         paymentMethodDAO.deleteById(payMethodId);
 
         return true;
