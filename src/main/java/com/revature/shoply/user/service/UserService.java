@@ -83,6 +83,11 @@ public class UserService {
 
         User foundUser = findUserByIdAndValidate(userId);
 
+        User usernameCheck = userDAO.findByUsername(incomingUser.getUsername());
+        if(usernameCheck != null && usernameCheck.getId() != userId){
+            throw new IllegalArgumentException("Username " + incomingUser.getUsername() + " is already taken. Try a different username");
+        }
+
         foundUser.setUsername(incomingUser.getUsername());
         foundUser.setEmail(incomingUser.getEmail());
         foundUser.setFirstName(incomingUser.getFirstname());
