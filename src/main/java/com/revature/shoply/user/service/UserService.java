@@ -6,7 +6,7 @@ import com.revature.shoply.models.User;
 import com.revature.shoply.user.DTO.*;
 import com.revature.shoply.user.repository.AddressDAO;
 import com.revature.shoply.user.repository.PaymentMethodDAO;
-import com.revature.shoply.user.repository.UserDAO;
+import com.revature.shoply.repositories.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * Default url is: /api/v1/users/login
  */
 @RestController
-@RequestMapping("/api/v1/users/login")
+@RequestMapping("/api/auth")
 @CrossOrigin
 public class LoginController {
     private final LoginService loginService;
@@ -34,7 +34,7 @@ public class LoginController {
      * @return A {@link ResponseEntity} containing an {@link OutgoingLoginDTO} object representing the logged-in user's details.
      *         Returns an HTTP 200 (OK) status if the login is successful.
      */
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<OutgoingLoginDTO> login(@RequestBody LoginDTO loginDTO){
         OutgoingLoginDTO loggedInUser = loginService.login(loginDTO);
 

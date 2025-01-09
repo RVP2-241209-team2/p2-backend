@@ -4,7 +4,9 @@ import com.revature.shoply.login.repository.LoginDAO;
 import com.revature.shoply.login.DTO.LoginDTO;
 import com.revature.shoply.login.DTO.OutgoingLoginDTO;
 import com.revature.shoply.models.User;
+import com.revature.shoply.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,9 +16,15 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final LoginDAO loginDAO;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtUtil jwtUtil;
+
     @Autowired
-    public LoginService(LoginDAO loginDAO) {
+    public LoginService(LoginDAO loginDAO, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.passwordEncoder = passwordEncoder;
         this.loginDAO = loginDAO;
+        this.jwtUtil = jwtUtil;
     }
 
 
@@ -41,19 +49,19 @@ public class LoginService {
         if(username.isBlank()) throw new IllegalArgumentException("Username cannot be blank!");
         if(password.isBlank()) throw new IllegalArgumentException("Password cannot be blank!");
 
-        User user = loginDAO.findByUsernameAndPassword(
-            username,
-            password
-        );
+        User user = loginDAO.findByUsername(username);
 
-        if(user == null) throw new IllegalArgumentException("No user found with those credentials");
-
-        return new OutgoingLoginDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getRole()
-        );
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return new OutgoingLoginDTO(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getRole(),
+                    jwtUtil.generateToken(user)
+            );
+        } else {
+            throw new IllegalArgumentException("Invalid username or password!");
+        }
     }
 }

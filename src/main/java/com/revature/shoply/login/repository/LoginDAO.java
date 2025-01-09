@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface LoginDAO extends JpaRepository<User, UUID> {
     User findByUsernameAndPassword(String username, String password);
+
+    User findByUsername(String username);
 }

@@ -1,5 +1,4 @@
-package com.revature.shoply.user.repository;
-
+package com.revature.shoply.repositories;
 
 import com.revature.shoply.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface UserDAO extends JpaRepository<User, UUID> {
+    User findByEmail(String email);
     User findByUsername(String username);
 }
+

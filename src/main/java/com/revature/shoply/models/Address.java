@@ -46,7 +46,6 @@ public class Address {
     @JsonIgnore
     private List<PaymentDetails> paymentDetails;
 
-
     public Address() {
     }
 
