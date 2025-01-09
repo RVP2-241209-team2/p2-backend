@@ -35,6 +35,17 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, user));
     }
 
+    @DeleteMapping("/{userId}")
+    ResponseEntity<Map<String, String>> deleteUser(@PathVariable UUID userId){
+        boolean isSuccess = userService.deleteUser(userId);
+
+        if(isSuccess) {
+            return ResponseEntity.ok(Collections.singletonMap("message", "User deleted!"));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Something went wrong!"));
+    }
+
     @PatchMapping("/{userId}/password")
     ResponseEntity<Map<String, String>> updateUserPassword(@RequestBody Map<String, Object> password, @PathVariable UUID userId){
         String oldPassword = (String) password.get("oldPassword");
