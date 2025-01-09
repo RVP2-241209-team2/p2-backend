@@ -20,7 +20,7 @@ public class OrderController {
     @Autowired
     public OrderController(OrderService orderService){this.orderService=orderService;}
 
-     @GetMapping
+    @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
 
         List<Order> orders = orderService.getAllOrders();

@@ -6,6 +6,8 @@ import com.revature.shoply.repositories.TagDAO;
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.ProductTag;
 import com.revature.shoply.models.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Service
 public class ProductTagService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductTagService.class);
 
     private final ProductTagDAO productTagDAO;
 
@@ -27,6 +31,7 @@ public class ProductTagService {
     }
 
     public Product addTagToProduct(UUID productId, String tagName) {
+        log.info("Adding tag to product with id: {}", productId);
         ProductTag productTag = new ProductTag();
         Product product = productDAO.findById(productId).orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
         productTag.setProduct(product);

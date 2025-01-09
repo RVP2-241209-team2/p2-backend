@@ -8,6 +8,8 @@ import com.revature.shoply.product.DTO.IncomingProductDTO;
 import com.revature.shoply.product.exception.ProductRegistrationException;
 import com.revature.shoply.product.exception.ProductRepositoryException;
 import com.revature.shoply.product.repository.ProductDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.revature.shoply.models.Product;
 @Service // service bean entity
 public class ProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
+
     private final ProductDAO productDAO;
 
     @Autowired
@@ -27,6 +31,7 @@ public class ProductService {
     }
 
     public Product updateProduct(UUID id, String name, String description, double price) {
+        log.info("Updating product with id: {}", id);
         Optional<Product> optionalProduct = productDAO.findById(id);
 
         if (optionalProduct.isPresent()) {
@@ -41,6 +46,7 @@ public class ProductService {
     }
 
     public Product addProduct(IncomingProductDTO productDTO) {
+        log.info("Adding product: {}", productDTO);
         // 1. validate user fields
         if (productDTO.isValid()) {
 
@@ -57,6 +63,7 @@ public class ProductService {
     }
 
     public List<Product> getProductsByTag(String name) {
+        log.info("Fetching products by tag: {}", name);
         Optional<List<Product>> productsExist = productDAO.findByTags_TagName(name);
         if(productsExist.isPresent()) {
             return productsExist.get();
@@ -65,6 +72,7 @@ public class ProductService {
     }
 
     public int removeProduct(UUID productId) {
+        log.info("Removing product with id: {}", productId);
         // 1. ensure product exists
         Optional<Product> existingProduct = productDAO.findById(productId);
         if (existingProduct.isPresent()) {

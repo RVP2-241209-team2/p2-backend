@@ -8,6 +8,8 @@ import com.revature.shoply.models.CartItem;
 import com.revature.shoply.customer.DTOs.IncomingCartItemDTO;
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.UUID;
 
 @Service
 public class CartService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
     private final CartDAO cartDAO;
     private final ProductDAO productDAO;
@@ -29,10 +33,12 @@ public class CartService {
     }
 
     public void DeleteCartItemById(UUID cartItemId){
+        log.info("Deleting cart item with ID: {}", cartItemId);
         cartDAO.deleteById(cartItemId);
     }
 
     public Cart addToCart(IncomingCartItemDTO cartItemDTO) {
+        log.info("Adding item to cart: {}", cartItemDTO);
 
         if (cartItemDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
@@ -88,6 +94,7 @@ public class CartService {
 
         cart.setTotal(newTotal);
 
+        log.info("Saving cart: {}", cart);
         return cartDAO.save(cart);
     }
 }

@@ -39,11 +39,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            logger.info("Extracting user id and role from token");
+            logger.debug("Extracting user id and role from token");
             try {
                 UUID userId = UUID.fromString(jwtUtil.extractUserId(token));
                 UserRole role = jwtUtil.extractRole(token);
-                logger.info("Extracted user id: {} and role: {}", userId, role);
+                logger.debug("Extracted user id: {} and role: {}", userId, role);
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority(role.name())));
 
