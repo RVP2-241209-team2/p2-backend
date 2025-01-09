@@ -3,15 +3,15 @@ package com.revature.shoply.registration.service;
 import com.revature.shoply.models.User;
 import com.revature.shoply.registration.dto.UserRegistrationRequestDTO;
 import com.revature.shoply.registration.dto.UserRegistrationResponseDTO;
-import com.revature.shoply.registration.repository.UserRegistrationRepository;
+import com.revature.shoply.registration.repository.UserRegistrationDAO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserRegistrationService {
 
-    private final UserRegistrationRepository registrationRepository;
+    private final UserRegistrationDAO registrationRepository;
 
-    public UserRegistrationService(UserRegistrationRepository registrationRepository) {
+    public UserRegistrationService(UserRegistrationDAO registrationRepository) {
         this.registrationRepository = registrationRepository;
     }
 
