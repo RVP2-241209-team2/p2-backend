@@ -3,16 +3,20 @@ package com.revature.shoply.registration.service;
 import com.revature.shoply.models.User;
 import com.revature.shoply.registration.dto.UserRegistrationRequestDTO;
 import com.revature.shoply.registration.dto.UserRegistrationResponseDTO;
-import com.revature.shoply.registration.repository.UserRegistrationRepository;
+import com.revature.shoply.registration.repository.UserRegistrationDAO;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserRegistrationService {
 
-    private final UserRegistrationRepository registrationRepository;
+    private final UserRegistrationDAO registrationDAO;
 
-    public UserRegistrationService(UserRegistrationRepository registrationRepository) {
-        this.registrationRepository = registrationRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserRegistrationService(UserRegistrationDAO registrationDAO, PasswordEncoder passwordEncoder) {
+        this.registrationDAO = registrationDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserRegistrationResponseDTO registerUser(UserRegistrationRequestDTO registrationRequestDTO) {
@@ -20,7 +24,8 @@ public class UserRegistrationService {
             validateRegistrationRequest(registrationRequestDTO);
             checkForDuplicateFields(registrationRequestDTO);
             User user = mapToUser(registrationRequestDTO);
-            User savedUser = registrationRepository.save(user);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User savedUser = registrationDAO.save(user);
             return mapToResponseDto(savedUser);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -52,13 +57,13 @@ public class UserRegistrationService {
     }
 
     private void checkForDuplicateFields(UserRegistrationRequestDTO registrationDto) {
-        if (registrationRepository.existsByEmail(registrationDto.getEmail())) {
+        if (registrationDAO.existsByEmail(registrationDto.getEmail())) {
             throw new IllegalArgumentException("Email is already in use");
         }
-        if (registrationRepository.existsByPhoneNumber(registrationDto.getPhoneNumber())) {
+        if (registrationDAO.existsByPhoneNumber(registrationDto.getPhoneNumber())) {
             throw new IllegalArgumentException("Phone number is already in use");
         }
-        if (registrationRepository.existsByUsername(registrationDto.getUsername())) {
+        if (registrationDAO.existsByUsername(registrationDto.getUsername())) {
             throw new IllegalArgumentException("Username is already in use");
         }
     }
