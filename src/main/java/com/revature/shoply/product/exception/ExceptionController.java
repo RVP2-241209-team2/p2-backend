@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * This exception controller handles all exceptions related to Product management
  */
-@RestControllerAdvice // defines REST global exception handler
+@RestControllerAdvice(basePackages = "com.revature.shoply.product") // defines REST global exception handler
 public class ExceptionController {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/customers/**").hasAuthority(UserRole.CUSTOMER.name())
                                 .requestMatchers("/api/admins/**").hasAuthority(UserRole.ADMIN.name())
                                 .requestMatchers("/api/store_owners/**").hasAuthority(UserRole.STORE_OWNER.name())
+                                .requestMatchers("/api/s3/**").hasAuthority(UserRole.STORE_OWNER.name()) 
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/users/v1/login").permitAll()
                                 .requestMatchers("/api/users/v1/register").permitAll()
