@@ -14,4 +14,6 @@ public interface ProductDAO extends JpaRepository<Product, UUID> {
     public Optional<Product> findByName(String name);
 
     public Optional<List<Product>> findByTags_TagName(String name);
+
+    List<Product> findByNameContaining(String name);
 }

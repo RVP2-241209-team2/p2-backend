@@ -60,4 +60,11 @@ public class ProductController {
         return productService.removeProduct(productId);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> getProductsByName(@RequestParam("name") String name) {
+        if(name == null || name.isBlank()) throw  new IllegalArgumentException("No name provided!");
+        List<Product> products = productService.findProductsBySimilarName(name);
+        return ResponseEntity.ok(products);
+    }
+
 }
