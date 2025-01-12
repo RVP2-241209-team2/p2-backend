@@ -23,17 +23,13 @@ public class S3Service {
     }
 
     public String generatePresignedUrl(String fileName, String contentType) {
-        // Generate a unique file name to prevent overwrites
-        String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName.replaceAll(" ", "_");
-        
         // Set the presigned URL to expire after 5 minutes
         Date expiration = Date.from(Instant.now().plusSeconds(300));
-        
-        GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(bucketName, uniqueFileName)
-                        .withMethod(HttpMethod.PUT)
-                        .withExpiration(expiration);
-        
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, fileName)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(expiration);
+
         // Set the content type so the uploaded file has the correct MIME type
         generatePresignedUrlRequest.setContentType(contentType);
 
