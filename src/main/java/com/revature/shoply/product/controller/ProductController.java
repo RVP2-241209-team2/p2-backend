@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.revature.shoply.product.DTO.IncomingProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class ProductController {
     @Autowired
     public  ProductController(ProductService  productService){ this.productService = productService;}
 
-
+    @Secured("STORE_OWNER")
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody Product productDetails) {
 
@@ -44,6 +45,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @Secured("STORE_OWNER")
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody IncomingProductDTO productDTO) {
         return ResponseEntity.ok(productService.addProduct(productDTO));
@@ -55,6 +57,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsByTag(name));
     }
 
+    @Secured("STORE_OWNER")
     @DeleteMapping("/{productId}")
     public int removeProduct(@PathVariable UUID productId) {
         return productService.removeProduct(productId);
