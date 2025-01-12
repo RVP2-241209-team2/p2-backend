@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 public class UserRegistrationController {
 
     private final UserRegistrationService registrationService;

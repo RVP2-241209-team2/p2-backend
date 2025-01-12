@@ -77,4 +77,13 @@ public class ProductService {
     public List<Product> findProductsBySimilarName(String name) {
         return productDAO.findByNameContaining(name);
     }
+
+    public Product getProductById(UUID id) {
+        Optional<Product> product = productDAO.findById(id);
+        if (product.isPresent()) {
+            return product.get();
+        } else {
+            throw new RuntimeException("Product not found with id: " + id);
+        }
+    }
 }
