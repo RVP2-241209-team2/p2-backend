@@ -23,6 +23,12 @@ public class S3Service {
     }
 
     public String generatePresignedUrl(String fileName, String contentType) {
+        if (fileName == null || fileName.trim().isEmpty()) {
+            throw new IllegalArgumentException("File name cannot be null or empty");
+        }
+        if (contentType == null || contentType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Content type cannot be null or empty");
+        }
         // Set the presigned URL to expire after 5 minutes
         Date expiration = Date.from(Instant.now().plusSeconds(300));
 
