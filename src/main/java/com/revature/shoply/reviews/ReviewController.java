@@ -60,4 +60,11 @@ public class ReviewController {
         return ResponseEntity.ok("Review deleted");
     }
 
+    @Secured("CUSTOMER")
+    @PatchMapping("/update/{reviewId}")
+    public ResponseEntity<Review> updateReview(@PathVariable String reviewId, @RequestBody ReviewDTO review, @RequestHeader("Authorization") String token) {
+        review.setUserId(jwtUtil.extractUserId(token.substring(7));
+        return ResponseEntity.ok(reviewService.updateReview(reviewId, review));
+    }
+
 }

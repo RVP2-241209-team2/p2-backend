@@ -69,4 +69,16 @@ public class ReviewService {
         reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), id);
 
     }
+
+    public Review updateReview(String reviewId, ReviewDTO review) {
+        Review oldReview = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(()
+                -> new RuntimeException("Review not found"));
+        if (review.getUserId() != oldReview.getUser().getId().toString()) {
+            throw new RuntimeException("User does not have permission to update this review");
+        }
+        oldReview.setTitle(review.getTitle());
+        oldReview.setDescription(review.getDescription());
+        oldReview.setRating(review.getRating());
+        return reviewRepository.save(oldReview);
+    }
 }
