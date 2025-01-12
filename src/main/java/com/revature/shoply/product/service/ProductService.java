@@ -73,4 +73,8 @@ public class ProductService {
             return 1;
         } else return 0;
     }
+
+    public List<Product> findProductsBySimilarName(String name) {
+        return productDAO.findByNameContaining(name);
+    }
 }
