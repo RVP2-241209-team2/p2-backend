@@ -22,8 +22,12 @@ public class ProductService {
     private final ProductDAO productDAO;
 
     @Autowired
-    public ProductService (ProductDAO productRepository){
+    public ProductService(ProductDAO productRepository) {
         this.productDAO = productRepository;
+    }
+
+    public List<Product> getAllProducts() {
+        return productDAO.findAll();
     }
 
     public Product updateProduct(UUID id, String name, String description, double price) {
@@ -52,13 +56,15 @@ public class ProductService {
                 Product product = new Product(null, productDTO.getName(),
                         productDTO.getDescription(), productDTO.getPrice(), productDTO.getQuantity());
                 return productDAO.save(product);
-            } else throw new ProductRepositoryException("A product with that name already exists");
-        } else throw new ProductRegistrationException("Invalid product details: mismatched properties");
+            } else
+                throw new ProductRepositoryException("A product with that name already exists");
+        } else
+            throw new ProductRegistrationException("Invalid product details: mismatched properties");
     }
 
     public List<Product> getProductsByTag(String name) {
         Optional<List<Product>> productsExist = productDAO.findByTags_TagName(name);
-        if(productsExist.isPresent()) {
+        if (productsExist.isPresent()) {
             return productsExist.get();
         }
         return null;
@@ -71,7 +77,8 @@ public class ProductService {
             // 2. delete
             productDAO.deleteById(productId);
             return 1;
-        } else return 0;
+        } else
+            return 0;
     }
 
     public List<Product> findProductsBySimilarName(String name) {
