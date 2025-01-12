@@ -74,6 +74,10 @@ public class ProductService {
         } else return 0;
     }
 
+    public List<Product> findProductsBySimilarName(String name) {
+        return productDAO.findByNameContaining(name);
+    }
+
     public Product getProductById(UUID id) {
         Optional<Product> product = productDAO.findById(id);
         if (product.isPresent()) {
