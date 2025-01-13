@@ -37,7 +37,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers("/api/customers/**").hasAuthority(UserRole.CUSTOMER.name())
+                                // .requestMatchers("/api/customers/**").hasAuthority(UserRole.CUSTOMER.name())
+                                .requestMatchers("/api/customers/**").authenticated()
                                 .requestMatchers("/api/admins/**").hasAuthority(UserRole.ADMIN.name())
                                 .requestMatchers("/api/store_owners/**").hasAuthority(UserRole.STORE_OWNER.name())
                                 .requestMatchers("/api/s3/**").hasAuthority(UserRole.STORE_OWNER.name()) 
