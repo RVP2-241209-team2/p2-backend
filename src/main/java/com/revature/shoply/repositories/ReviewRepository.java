@@ -1,4 +1,4 @@
-package com.revature.shoply.reviews;
+package com.revature.shoply.repositories;
 
 import com.revature.shoply.models.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.revature.shoply.services;
+package com.revature.shoply.productTags.services;
 
 import com.revature.shoply.repositories.TagDAO;
 import com.revature.shoply.models.Tag;

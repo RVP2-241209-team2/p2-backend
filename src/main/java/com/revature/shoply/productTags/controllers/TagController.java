@@ -1,8 +1,7 @@
-package com.revature.shoply.controllers;
+package com.revature.shoply.productTags.controllers;
 
 import com.revature.shoply.models.Tag;
-import com.revature.shoply.models.enums.UserRole;
-import com.revature.shoply.services.TagService;
+import com.revature.shoply.productTags.services.TagService;
 import org.springframework.http.ResponseEntity;
 
 

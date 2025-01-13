@@ -4,6 +4,7 @@ import com.revature.shoply.models.Product;
 import com.revature.shoply.models.Review;
 import com.revature.shoply.models.User;
 import com.revature.shoply.product.service.ProductService;
+import com.revature.shoply.repositories.ReviewRepository;
 import com.revature.shoply.reviews.dto.ReviewDTO;
 import com.revature.shoply.reviews.exceptions.NotAuthorizedException;
 import com.revature.shoply.user.service.UserService;
