@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserDAO userDAO;
     private final AddressDAO addressDAO;
     private final PaymentMethodDAO paymentMethodDAO;
-
 
     @Autowired
     public UserService(UserDAO userDAO, AddressDAO addressDAO, PaymentMethodDAO paymentMethodDAO) {
@@ -26,34 +26,53 @@ public class UserService {
         this.paymentMethodDAO = paymentMethodDAO;
     }
 
-    public User findUserByIdAndValidate(UUID userId){
-        if(userId == null) throw new IllegalArgumentException("User ID cannot be blank!");
+    public List<OutgoingUserDTO> getAllUsers() {
+        List<User> users = userDAO.findAll();
+        return users.stream()
+                .map(user -> new OutgoingUserDTO(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPhoneNumber(),
+                        user.getRole()))
+                .collect(Collectors.toList());
+    }
+
+    public User findUserByIdAndValidate(UUID userId) {
+        if (userId == null)
+            throw new IllegalArgumentException("User ID cannot be blank!");
 
         Optional<User> foundUser = userDAO.findById(userId);
 
-        if(foundUser.isEmpty()) throw new IllegalArgumentException("No user found by ID: " + userId);
+        if (foundUser.isEmpty())
+            throw new IllegalArgumentException("No user found by ID: " + userId);
 
         return foundUser.get();
     }
 
-    public Address findAddressByIdAndValidate(UUID addressId){
-        if(addressId == null) throw new IllegalArgumentException("Address ID cannot be null");
+    public Address findAddressByIdAndValidate(UUID addressId) {
+        if (addressId == null)
+            throw new IllegalArgumentException("Address ID cannot be null");
         Optional<Address> foundAddress = addressDAO.findById(addressId);
-        if(foundAddress.isEmpty()) throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
+        if (foundAddress.isEmpty())
+            throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
 
         return foundAddress.get();
     }
 
-    public PaymentDetails findPayMethodByIdAndValidate(UUID payMethodId){
-        if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
+    public PaymentDetails findPayMethodByIdAndValidate(UUID payMethodId) {
+        if (payMethodId == null)
+            throw new IllegalArgumentException("Payment Method ID cannot be null");
         Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
-        if(foundPayMethod.isEmpty()) throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
+        if (foundPayMethod.isEmpty())
+            throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
 
         return foundPayMethod.get();
     }
 
-
-    public OutgoingUserDTO getUserInfo(UUID userId){
+    public OutgoingUserDTO getUserInfo(UUID userId) {
         User foundUser = findUserByIdAndValidate(userId);
 
         return new OutgoingUserDTO(
@@ -63,37 +82,37 @@ public class UserService {
                 foundUser.getFirstName(),
                 foundUser.getLastName(),
                 foundUser.getPhoneNumber(),
-                foundUser.getRole()
-        );
+                foundUser.getRole());
     }
 
-    public OutgoingUserDTO updateUser(UUID userId, IncomingUserDTO incomingUser){
+    public OutgoingUserDTO updateUser(UUID userId, IncomingUserDTO incomingUser) {
 
-        if(incomingUser.getUsername() == null || incomingUser.getUsername().isBlank()){
+        if (incomingUser.getUsername() == null || incomingUser.getUsername().isBlank()) {
             throw new IllegalArgumentException("Username cannot be blank or null");
         }
 
-        if(incomingUser.getEmail() == null || incomingUser.getEmail().isBlank()){
+        if (incomingUser.getEmail() == null || incomingUser.getEmail().isBlank()) {
             throw new IllegalArgumentException("User email cannot be blank or null");
         }
 
-        if(incomingUser.getFirstname() == null || incomingUser.getFirstname().isBlank()){
+        if (incomingUser.getFirstname() == null || incomingUser.getFirstname().isBlank()) {
             throw new IllegalArgumentException("User first name cannot be blank or null");
         }
 
-        if(incomingUser.getLastname() == null || incomingUser.getLastname().isBlank()){
+        if (incomingUser.getLastname() == null || incomingUser.getLastname().isBlank()) {
             throw new IllegalArgumentException("User last name cannot be blank or null");
         }
 
-        if(incomingUser.getPhoneNumber() == null || incomingUser.getPhoneNumber().isBlank()){
+        if (incomingUser.getPhoneNumber() == null || incomingUser.getPhoneNumber().isBlank()) {
             throw new IllegalArgumentException("User phone number cannot be blank or null");
         }
 
         User foundUser = findUserByIdAndValidate(userId);
 
         User usernameCheck = userDAO.findByUsername(incomingUser.getUsername());
-        if(usernameCheck != null && usernameCheck.getId() != userId){
-            throw new IllegalArgumentException("Username " + incomingUser.getUsername() + " is already taken. Try a different username");
+        if (usernameCheck != null && usernameCheck.getId() != userId) {
+            throw new IllegalArgumentException(
+                    "Username " + incomingUser.getUsername() + " is already taken. Try a different username");
         }
 
         foundUser.setUsername(incomingUser.getUsername());
@@ -111,15 +130,13 @@ public class UserService {
                 newUser.getFirstName(),
                 newUser.getLastName(),
                 newUser.getPhoneNumber(),
-                newUser.getRole()
-        );
+                newUser.getRole());
     }
 
-
-    public boolean deleteUser(UUID userId){
+    public boolean deleteUser(UUID userId) {
         User foundUser = findUserByIdAndValidate(userId);
 
-        if(foundUser == null) {
+        if (foundUser == null) {
             return false;
         } else {
             userDAO.deleteById(userId);
@@ -127,36 +144,33 @@ public class UserService {
         }
     }
 
-
-    public boolean updateUserPassword(UUID userId, String oldPassword, String newPassword){
-        if(oldPassword == null || oldPassword.isBlank()){
+    public boolean updateUserPassword(UUID userId, String oldPassword, String newPassword) {
+        if (oldPassword == null || oldPassword.isBlank()) {
             throw new IllegalArgumentException("Old password cannot be blank or null");
         }
-        if(newPassword == null || newPassword.isBlank()){
+        if (newPassword == null || newPassword.isBlank()) {
             throw new IllegalArgumentException("New password cannot be blank or null");
         }
 
         User foundUser = findUserByIdAndValidate(userId);
 
-        if(foundUser.getPassword().equals(oldPassword)) {
-           foundUser.setPassword(newPassword);
-           userDAO.save(foundUser);
-           return true;
+        if (foundUser.getPassword().equals(oldPassword)) {
+            foundUser.setPassword(newPassword);
+            userDAO.save(foundUser);
+            return true;
         } else {
             throw new IllegalArgumentException("Old password is wrong!");
         }
     }
 
+    // Addresses
 
-
-    //Addresses
-
-    public List<Address> getAddresses(UUID userId){
+    public List<Address> getAddresses(UUID userId) {
         User foundUser = findUserByIdAndValidate(userId);
         return addressDAO.findByUserId(userId);
     }
 
-    public Address addAddress(UUID userId, IncomingAddressDTO address){
+    public Address addAddress(UUID userId, IncomingAddressDTO address) {
         User foundUser = findUserByIdAndValidate(userId);
         Address newAddress = new Address(
                 null,
@@ -167,18 +181,19 @@ public class UserService {
                 address.getState(),
                 address.getZipCode(),
                 address.getCountry(),
-                address.getType()
-        );
+                address.getType());
 
         return addressDAO.save(newAddress);
     }
 
-    public Address updateAddress(UUID userId, UUID addressId, IncomingAddressDTO address){
+    public Address updateAddress(UUID userId, UUID addressId, IncomingAddressDTO address) {
         User foundUser = findUserByIdAndValidate(userId);
 
-        if(addressId == null) throw new IllegalArgumentException("Address ID cannot be null");
+        if (addressId == null)
+            throw new IllegalArgumentException("Address ID cannot be null");
         Optional<Address> foundAddress = addressDAO.findById(addressId);
-        if(foundAddress.isEmpty()) throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
+        if (foundAddress.isEmpty())
+            throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
 
         Address newAddress = foundAddress.get();
 
@@ -191,16 +206,15 @@ public class UserService {
         newAddress.setCountry(address.getCountry());
         newAddress.setType(address.getType());
 
-
         return addressDAO.save(newAddress);
     }
 
-    public boolean deleteAddress(UUID userId, UUID addressId){
+    public boolean deleteAddress(UUID userId, UUID addressId) {
 
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(addressId);
 
-        for(PaymentDetails paymentDetails: foundAddress.getPaymentDetails()){
+        for (PaymentDetails paymentDetails : foundAddress.getPaymentDetails()) {
             paymentDetails.setAddress(null);
             paymentMethodDAO.save(paymentDetails);
         }
@@ -210,17 +224,14 @@ public class UserService {
         return true;
     }
 
+    // Payment methods
 
-
-    //Payment methods
-
-    public List<PaymentDetails> getPaymentMethods(UUID userId){
+    public List<PaymentDetails> getPaymentMethods(UUID userId) {
         User foundUser = findUserByIdAndValidate(userId);
         return paymentMethodDAO.findByUserId(userId);
     }
 
-
-    public PaymentDetails addPayMethod(UUID userId, IncomingPayDetailsDTO payMethod){
+    public PaymentDetails addPayMethod(UUID userId, IncomingPayDetailsDTO payMethod) {
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
 
@@ -231,13 +242,12 @@ public class UserService {
                 payMethod.getCardHolderName(),
                 payMethod.getExpireDate(),
                 foundAddress,
-                payMethod.getIsDefault()
-        );
+                payMethod.getIsDefault());
 
         return paymentMethodDAO.save(newPaymentMethod);
     }
 
-    public PaymentDetails updatePayMethod(UUID userId, UUID payMethodId, IncomingPayDetailsDTO payMethod){
+    public PaymentDetails updatePayMethod(UUID userId, UUID payMethodId, IncomingPayDetailsDTO payMethod) {
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
         PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);
@@ -252,8 +262,7 @@ public class UserService {
         return paymentMethodDAO.save(foundPayMethod);
     }
 
-
-    public boolean deletePayMethod(UUID userId, UUID payMethodId){
+    public boolean deletePayMethod(UUID userId, UUID payMethodId) {
 
         User foundUser = findUserByIdAndValidate(userId);
         PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);

@@ -29,7 +29,9 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public  ProductController(ProductService  productService){ this.productService = productService;}
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @Secured("STORE_OWNER")
     @PutMapping("/{id}")
@@ -39,8 +41,8 @@ public class ProductController {
                 id,
                 productDetails.getName(),
                 productDetails.getDescription(),
-                productDetails.getPrice()
-        );
+                productDetails.getImages(),
+                productDetails.getPrice());
 
         return ResponseEntity.ok(updatedProduct);
     }
@@ -65,7 +67,8 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Product>> getProductsByName(@RequestParam("name") String name) {
-        if(name == null || name.isBlank()) throw  new IllegalArgumentException("No name provided!");
+        if (name == null || name.isBlank())
+            throw new IllegalArgumentException("No name provided!");
         List<Product> products = productService.findProductsBySimilarName(name);
         return ResponseEntity.ok(products);
     }

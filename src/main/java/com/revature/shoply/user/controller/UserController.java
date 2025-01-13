@@ -46,7 +46,7 @@ public class UserController {
         UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
         boolean isSuccess = userService.deleteUser(userId);
 
-        if(isSuccess) {
+        if (isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "User deleted!"));
         }
 
@@ -61,7 +61,7 @@ public class UserController {
 
         boolean isSuccess = userService.updateUserPassword(userId, oldPassword, newPassword);
 
-        if(isSuccess) {
+        if (isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Password updated successfully!"));
         }
 
@@ -92,7 +92,7 @@ public class UserController {
         UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
         boolean isSuccess = userService.deleteAddress(userId, addressId);
 
-        if(isSuccess) {
+        if (isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Address deleted!"));
         }
 
@@ -125,7 +125,7 @@ public class UserController {
         UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
         boolean isSuccess = userService.deletePayMethod(userId, payMethodId);
 
-        if(isSuccess) {
+        if (isSuccess) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Payment method deleted!"));
         }
 

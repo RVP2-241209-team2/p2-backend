@@ -2,6 +2,7 @@ package com.revature.shoply;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.revature.shoply.config.Parameters;
 import com.revature.shoply.product.service.S3Service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +22,16 @@ import static org.mockito.Mockito.*;
 class S3ServiceTest {
 
     @Mock
+    private Parameters params;
+
+    @Mock
     private AmazonS3 s3Client;
 
     private S3Service s3Service;
 
     @BeforeEach
     void setUp() {
-        s3Service = new S3Service(s3Client);
+        s3Service = new S3Service(s3Client, params);
         ReflectionTestUtils.setField(s3Service, "bucketName", "test-bucket");
     }
 
