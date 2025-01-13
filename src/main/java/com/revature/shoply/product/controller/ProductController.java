@@ -65,6 +65,12 @@ public class ProductController {
         return productService.removeProduct(productId);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Product>> getProducts(){
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<Product>> getProductsByName(@RequestParam("name") String name) {
         if (name == null || name.isBlank())
