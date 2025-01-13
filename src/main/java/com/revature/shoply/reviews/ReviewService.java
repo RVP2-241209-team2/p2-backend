@@ -5,6 +5,7 @@ import com.revature.shoply.models.Review;
 import com.revature.shoply.models.User;
 import com.revature.shoply.product.service.ProductService;
 import com.revature.shoply.reviews.dto.ReviewDTO;
+import com.revature.shoply.reviews.exceptions.NotAuthorizedException;
 import com.revature.shoply.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -77,7 +78,12 @@ public class ReviewService {
 
     @Transactional
     public void deleteCustomerReview(String reviewId, UUID user_id) {
-        log.info("Deleting review: " + reviewId + " for user: " + user_id);
+        log.info("Deleting review: {}", reviewId);
+        Review review = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(() ->
+                new RuntimeException("Review not found"));
+        if (!review.getUser().getId().equals(user_id)) {
+            throw new NotAuthorizedException("User does not have permission to delete this review");
+        }
         reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), user_id);
 
     }
@@ -86,7 +92,7 @@ public class ReviewService {
         Review oldReview = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(()
                 -> new RuntimeException("Review not found"));
         if (!review.getUserId().equals(oldReview.getUser().getId().toString())) {
-            throw new RuntimeException("User does not have permission to update this review");
+            throw new NotAuthorizedException("User does not have permission to update this review");
         }
         oldReview.setTitle(review.getTitle());
         oldReview.setDescription(review.getDescription());
