@@ -8,6 +8,8 @@ import com.revature.shoply.repositories.OrderRepository;
 import com.revature.shoply.product.service.ProductService;
 import com.revature.shoply.user.service.UserService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.UUID;
 
 @Service
 public class OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
     private final UserService userService;
@@ -31,19 +35,23 @@ public class OrderService {
     }
 
     public List<Order> getAllOrders() {
+        log.info("Getting all orders");
         return orderRepository.findAll();
     }
 
     public List<Order> getOrdersByUserId(UUID id) {
+        log.info("Getting orders by userId");
         return orderRepository.findByUserId(id);
     }
 
     public Order getOrderById(UUID id) {
+        log.info("Gettings orders by Id: {}", id);
         return orderRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Order with id " + id + " not found"));
     }
 
     public Order cancelOrder(UUID id) {
+        log.info("Canceling order with Id: {}", id);
         Order order = orderRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Order with id " + id + " not found"));
         order.setStatus(OrderStatus.CANCELLED);
@@ -52,6 +60,8 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(UUID userId, CreateOrderDTO order) {
+        log.info("Creating order for user");
+
         User user = userService.findUserByIdAndValidate(userId);
         Address address = userService.findAddressByIdAndValidate(UUID.fromString(order.getAddressId()));
         PaymentDetails paymentDetails = userService.findPayMethodByIdAndValidate(UUID.fromString(order.getPaymentId()));

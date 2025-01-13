@@ -4,11 +4,15 @@ import com.revature.shoply.models.User;
 import com.revature.shoply.registration.dto.UserRegistrationRequestDTO;
 import com.revature.shoply.registration.dto.UserRegistrationResponseDTO;
 import com.revature.shoply.registration.repository.UserRegistrationDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserRegistrationService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserRegistrationService.class);
 
     private final UserRegistrationDAO registrationDAO;
 
@@ -20,6 +24,7 @@ public class UserRegistrationService {
     }
 
     public UserRegistrationResponseDTO registerUser(UserRegistrationRequestDTO registrationRequestDTO) {
+        log.info("Registering user");
         try {
             validateRegistrationRequest(registrationRequestDTO);
             checkForDuplicateFields(registrationRequestDTO);
@@ -33,6 +38,7 @@ public class UserRegistrationService {
     }
 
     private void validateRegistrationRequest(UserRegistrationRequestDTO registrationDto) {
+        log.info("Validating user registration request");
         if (registrationDto.getUsername() == null || registrationDto.getUsername().isBlank()) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
@@ -57,6 +63,7 @@ public class UserRegistrationService {
     }
 
     private void checkForDuplicateFields(UserRegistrationRequestDTO registrationDto) {
+        log.info("Checking for duplicate fields");
         if (registrationDAO.existsByEmail(registrationDto.getEmail())) {
             throw new IllegalArgumentException("Email is already in use");
         }
@@ -69,6 +76,7 @@ public class UserRegistrationService {
     }
 
     private User mapToUser(UserRegistrationRequestDTO registrationDto) {
+        log.info("Mapping request to new User");
         User user = new User();
         user.setUsername(registrationDto.getUsername());
         user.setFirstName(registrationDto.getFirstName());
@@ -81,6 +89,7 @@ public class UserRegistrationService {
     }
 
     private UserRegistrationResponseDTO  mapToResponseDto(User user) {
+        log.info("Mapping user to response");
         UserRegistrationResponseDTO responseDto = new UserRegistrationResponseDTO();
         responseDto.setId(user.getId());
         responseDto.setUsername(user.getUsername());

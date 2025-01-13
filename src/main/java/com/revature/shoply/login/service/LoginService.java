@@ -5,6 +5,8 @@ import com.revature.shoply.login.DTO.LoginDTO;
 import com.revature.shoply.login.DTO.OutgoingLoginDTO;
 import com.revature.shoply.models.User;
 import com.revature.shoply.security.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LoginService {
+
+    private static final Logger log = LoggerFactory.getLogger(LoginService.class);
+
     private final LoginDAO loginDAO;
 
     private final PasswordEncoder passwordEncoder;
@@ -43,6 +48,8 @@ public class LoginService {
      *                                  with the provided credentials.
      */
     public OutgoingLoginDTO login(LoginDTO loginDTO){
+        log.info("Authenticating User");
+
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 

@@ -7,6 +7,8 @@ import com.revature.shoply.user.DTO.*;
 import com.revature.shoply.user.repository.AddressDAO;
 import com.revature.shoply.user.repository.PaymentMethodDAO;
 import com.revature.shoply.repositories.UserDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ import java.util.*;
 
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     private final UserDAO userDAO;
     private final AddressDAO addressDAO;
     private final PaymentMethodDAO paymentMethodDAO;
@@ -27,6 +32,8 @@ public class UserService {
     }
 
     public User findUserByIdAndValidate(UUID userId){
+        log.info("Finding user by id and validating");
+
         if(userId == null) throw new IllegalArgumentException("User ID cannot be blank!");
 
         Optional<User> foundUser = userDAO.findById(userId);
@@ -37,6 +44,8 @@ public class UserService {
     }
 
     public Address findAddressByIdAndValidate(UUID addressId){
+        log.info("Finding address by Id: {}, and validating", addressId);
+
         if(addressId == null) throw new IllegalArgumentException("Address ID cannot be null");
         Optional<Address> foundAddress = addressDAO.findById(addressId);
         if(foundAddress.isEmpty()) throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
@@ -45,6 +54,8 @@ public class UserService {
     }
 
     public PaymentDetails findPayMethodByIdAndValidate(UUID payMethodId){
+        log.info("Finding payment method by Id: {}, and validating", payMethodId);
+
         if(payMethodId == null) throw new IllegalArgumentException("Payment Method ID cannot be null");
         Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
         if(foundPayMethod.isEmpty()) throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
@@ -54,6 +65,8 @@ public class UserService {
 
 
     public OutgoingUserDTO getUserInfo(UUID userId){
+        log.info("Getting User Info");
+
         User foundUser = findUserByIdAndValidate(userId);
 
         return new OutgoingUserDTO(
@@ -68,6 +81,7 @@ public class UserService {
     }
 
     public OutgoingUserDTO updateUser(UUID userId, IncomingUserDTO incomingUser){
+        log.info("Updating user");
 
         if(incomingUser.getUsername() == null || incomingUser.getUsername().isBlank()){
             throw new IllegalArgumentException("Username cannot be blank or null");
@@ -117,6 +131,8 @@ public class UserService {
 
 
     public boolean deleteUser(UUID userId){
+        log.info("Deleting user");
+
         User foundUser = findUserByIdAndValidate(userId);
 
         if(foundUser == null) {
@@ -129,6 +145,8 @@ public class UserService {
 
 
     public boolean updateUserPassword(UUID userId, String oldPassword, String newPassword){
+        log.info("Updating user password");
+
         if(oldPassword == null || oldPassword.isBlank()){
             throw new IllegalArgumentException("Old password cannot be blank or null");
         }
@@ -152,11 +170,15 @@ public class UserService {
     //Addresses
 
     public List<Address> getAddresses(UUID userId){
+        log.info("Getting users addresses");
+
         User foundUser = findUserByIdAndValidate(userId);
         return addressDAO.findByUserId(userId);
     }
 
     public Address addAddress(UUID userId, IncomingAddressDTO address){
+        log.info("Adding address for user");
+
         User foundUser = findUserByIdAndValidate(userId);
         Address newAddress = new Address(
                 null,
@@ -174,6 +196,8 @@ public class UserService {
     }
 
     public Address updateAddress(UUID userId, UUID addressId, IncomingAddressDTO address){
+        log.info("Updating address for user");
+
         User foundUser = findUserByIdAndValidate(userId);
 
         if(addressId == null) throw new IllegalArgumentException("Address ID cannot be null");
@@ -196,6 +220,7 @@ public class UserService {
     }
 
     public boolean deleteAddress(UUID userId, UUID addressId){
+        log.info("Deleting address with Id: {}, for user", addressId);
 
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(addressId);
@@ -215,12 +240,16 @@ public class UserService {
     //Payment methods
 
     public List<PaymentDetails> getPaymentMethods(UUID userId){
+        log.info("Getting payment methods for user");
+
         User foundUser = findUserByIdAndValidate(userId);
         return paymentMethodDAO.findByUserId(userId);
     }
 
 
     public PaymentDetails addPayMethod(UUID userId, IncomingPayDetailsDTO payMethod){
+        log.info("Adding payment method for user");
+
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
 
@@ -238,6 +267,8 @@ public class UserService {
     }
 
     public PaymentDetails updatePayMethod(UUID userId, UUID payMethodId, IncomingPayDetailsDTO payMethod){
+        log.info("Updating payment method with id: {}, for user", payMethodId);
+
         User foundUser = findUserByIdAndValidate(userId);
         Address foundAddress = findAddressByIdAndValidate(payMethod.getAddressId());
         PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);
@@ -254,6 +285,7 @@ public class UserService {
 
 
     public boolean deletePayMethod(UUID userId, UUID payMethodId){
+        log.info("Deleting payment method");
 
         User foundUser = findUserByIdAndValidate(userId);
         PaymentDetails foundPayMethod = findPayMethodByIdAndValidate(payMethodId);
