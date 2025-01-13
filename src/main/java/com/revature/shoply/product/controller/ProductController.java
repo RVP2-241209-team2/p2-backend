@@ -71,6 +71,12 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/{productId}")
+    public ResponseEntity<Product> getProductById(@PathVariable UUID productId){
+        Product product = productService.getProductById(productId);
+        return ResponseEntity.ok(product);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<Product>> getProductsByName(@RequestParam("name") String name) {
         if (name == null || name.isBlank())
