@@ -37,8 +37,17 @@ public class ReviewService {
         Review newReview = new Review();
         newReview.setUser(user);
         newReview.setProduct(product);
+        if (review.getTitle() == null || review.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Review titel cannot be NULL or BLANK");
+        }
         newReview.setTitle(review.getTitle());
+        if (review.getDescription() == null || review.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Review Description cannot be NULL or BLANK");
+        }
         newReview.setDescription(review.getDescription());
+        if (review.getRating() < 1 || review.getRating() > 6) {
+            throw new IllegalArgumentException("Review rating must be between 1 and 5 stars");
+        }
         newReview.setRating(review.getRating());
 
         return reviewRepository.save(newReview);
