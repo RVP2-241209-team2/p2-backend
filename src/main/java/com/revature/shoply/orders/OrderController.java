@@ -2,6 +2,8 @@ package com.revature.shoply.orders;
 
 import com.revature.shoply.models.Order;
 import com.revature.shoply.orders.dto.CreateOrderDTO;
+import com.revature.shoply.security.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,14 @@ import java.util.UUID;
 @CrossOrigin
 public class OrderController {
 
+    private final JwtUtil jwtUtil;
+
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
+    @Autowired
+    public OrderController(OrderService orderService, JwtUtil jwtUtil) {
         this.orderService = orderService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Secured({"ADMIN", "STORE_OWNER"})
@@ -26,24 +32,31 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @GetMapping("/customer/{userId}/orders")
-    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable String userId) {
+    @Secured("CUSTOMER")
+    @GetMapping("/customer/orders")
+    public ResponseEntity<List<Order>> getOrdersByUserId(@RequestHeader("Authorization") String token) {
+        String userId = jwtUtil.extractUserId(token.substring(7));
         return ResponseEntity.ok(orderService.getOrdersByUserId(UUID.fromString(userId)));
     }
 
+    @Secured("CUSTOMER")
     @GetMapping("/customer/order/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable String orderId) {
-        return ResponseEntity.ok(orderService.getOrderById(UUID.fromString(orderId)));
+    public ResponseEntity<Order> getOrderById(@PathVariable String orderId, @RequestHeader("Authorization") String token) {
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
+        return ResponseEntity.ok(orderService.getOrderById(userId, UUID.fromString(orderId)));
     }
 
+    @Secured("CUSTOMER")
     @PatchMapping("/customer/order/{orderId}/cancel")
-    public ResponseEntity<Order> cancelOrder(@PathVariable String orderId) {
-        return ResponseEntity.ok(orderService.cancelOrder(UUID.fromString(orderId)));
+    public ResponseEntity<Order> cancelOrder(@PathVariable String orderId, @RequestHeader("Authorization") String token) {
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
+        return ResponseEntity.ok(orderService.cancelOrder(userId, UUID.fromString(orderId)));
     }
 
-    @PostMapping("/customer/{userId}/order/create")
-    public ResponseEntity<Order> createOrder(@PathVariable String userId, @RequestBody CreateOrderDTO order) {
-        return ResponseEntity.ok(orderService.createOrder(UUID.fromString(userId), order));
+    @PostMapping("/customer/order/create")
+    public ResponseEntity<Order> createOrder(@RequestBody CreateOrderDTO order, @RequestHeader("Authorization") String token) {
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
+        return ResponseEntity.ok(orderService.createOrder(userId, order));
     }
 
 }

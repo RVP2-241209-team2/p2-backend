@@ -6,6 +6,13 @@ import java.util.UUID;
 import com.revature.shoply.product.DTO.IncomingProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import com.revature.shoply.models.Product;
@@ -26,16 +33,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable UUID id) {
-        return ResponseEntity.ok(productService.getProductById(id));
-    }
-
+    @Secured("STORE_OWNER")
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody Product productDetails) {
 
@@ -49,16 +47,19 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @Secured("STORE_OWNER")
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody IncomingProductDTO productDTO) {
         return ResponseEntity.ok(productService.addProduct(productDTO));
     }
+
 
     @GetMapping("/tag/{name}")
     public ResponseEntity<List<Product>> getProductsByTag(@PathVariable String name) {
         return ResponseEntity.ok(productService.getProductsByTag(name));
     }
 
+    @Secured("STORE_OWNER")
     @DeleteMapping("/{productId}")
     public int removeProduct(@PathVariable UUID productId) {
         return productService.removeProduct(productId);
