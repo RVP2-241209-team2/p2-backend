@@ -1,5 +1,7 @@
 package com.revature.shoply.product.DTO;
 
+import java.util.List;
+
 /**
  * This Product Data Transfer Object will model incoming Product JSON object.
  */
@@ -7,16 +9,19 @@ public class IncomingProductDTO {
 
     private String description;
     private String name;
+    private List<String> images;
     private int quantity;
     private int price;
 
     // boilerplate - no args, all args, getter/setter, toString
 
-    public IncomingProductDTO() {}
+    public IncomingProductDTO() {
+    }
 
-    public IncomingProductDTO(String description, String name, int quantity, int price) {
+    public IncomingProductDTO(String description, String name, List<String> images, int quantity, int price) {
         this.description = description;
         this.name = name;
+        this.images = images;
         this.quantity = quantity;
         this.price = price;
     }
@@ -35,6 +40,14 @@ public class IncomingProductDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public int getQuantity() {

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.revature.shoply.product.DTO.IncomingProductDTO;
 import com.revature.shoply.product.exception.ProductRegistrationException;
-import com.revature.shoply.product.exception.ProductRepositoryException;
 import com.revature.shoply.product.repository.ProductDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class ProductService {
         return productDAO.findAll();
     }
 
-    public Product updateProduct(UUID id, String name, String description, double price) {
+    public Product updateProduct(UUID id, String name, String description, List<String> images, double price) {
         Optional<Product> optionalProduct = productDAO.findById(id);
 
         if (optionalProduct.isPresent()) {
@@ -38,6 +37,9 @@ public class ProductService {
             product.setName(name);
             product.setDescription(description);
             product.setPrice(price);
+            if (images != null) {
+                product.setImages(images);
+            }
             return productDAO.save(product);
         } else {
             throw new RuntimeException("Product not found with id: " + id);
@@ -45,21 +47,20 @@ public class ProductService {
     }
 
     public Product addProduct(IncomingProductDTO productDTO) {
-        // 1. validate user fields
-        if (productDTO.isValid()) {
+        if (!productDTO.isValid()) {
+            throw new ProductRegistrationException("Invalid product details");
+        }
 
-            // 2. verify product does !exist
-            Optional<Product> existingProduct = productDAO.findByName(productDTO.getName());
-            if (!existingProduct.isPresent()) {
 
-                // 3. Convert to Product model instance & return saved product
-                Product product = new Product(null, productDTO.getName(),
-                        productDTO.getDescription(), productDTO.getPrice(), productDTO.getQuantity());
-                return productDAO.save(product);
-            } else
-                throw new ProductRepositoryException("A product with that name already exists");
-        } else
-            throw new ProductRegistrationException("Invalid product details: mismatched properties");
+        Optional<Product> existingProduct = productDAO.findByName(productDTO.getName());
+        if (existingProduct.isPresent()) {
+            throw new ProductRegistrationException("Product already exists with name: " + productDTO.getName());
+        }
+
+        Product product = new Product(null, productDTO.getName(),
+                productDTO.getDescription(), productDTO.getImages(), productDTO.getPrice(),
+                productDTO.getQuantity());
+        return productDAO.save(product);
     }
 
     public List<Product> getProductsByTag(String name) {
