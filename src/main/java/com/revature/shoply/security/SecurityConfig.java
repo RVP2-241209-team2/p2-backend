@@ -37,7 +37,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers("/api/customers/**").hasAuthority(UserRole.CUSTOMER.name())
+                                // .requestMatchers("/api/customers/**").hasAuthority(UserRole.CUSTOMER.name())
+                                .requestMatchers("/api/customers/**").authenticated()
                                 .requestMatchers("/api/admins/**").hasAuthority(UserRole.ADMIN.name())
                                 .requestMatchers("/api/store_owners/**").hasAuthority(UserRole.STORE_OWNER.name())
                                 .requestMatchers("/api/s3/**").hasAuthority(UserRole.STORE_OWNER.name()) 
@@ -56,7 +57,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // TODO: Change to production URL
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173",
+                "http://shoply-p2.s3-website-us-east-1.amazonaws.com/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

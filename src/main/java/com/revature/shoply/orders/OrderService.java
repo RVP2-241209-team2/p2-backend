@@ -38,14 +38,24 @@ public class OrderService {
         return orderRepository.findByUserId(id);
     }
 
-    public Order getOrderById(UUID id) {
-        return orderRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Order with id " + id + " not found"));
+    public Order getOrderById(UUID userId, UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new RuntimeException("Order with id {} not found" + orderId));
+
+        if (!order.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Order with id {}, does not belong to user with id {}" + orderId + userId);
+        }
+        return orderRepository.findById(orderId).orElseThrow(() ->
+                new RuntimeException("Order with id " + orderId + " not found"));
     }
 
-    public Order cancelOrder(UUID id) {
-        Order order = orderRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Order with id " + id + " not found"));
+    public Order cancelOrder(UUID userId, UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new RuntimeException("Order with id {} not found" + orderId));
+
+        if (!order.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Order with id {}, does not belong to user with id {}" + orderId + userId);
+        }
         order.setStatus(OrderStatus.CANCELLED);
         return orderRepository.save(order);
     }
