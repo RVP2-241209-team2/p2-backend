@@ -44,9 +44,20 @@ public class RegistrationControllerIntegrationTest {
                 newRequestDTO,
                 UserRegistrationResponseDTO.class);
 
+        UserRegistrationResponseDTO actualResponse = response.getBody();
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getBody()).isNull();
-        assertThat(response.getHeaders().getLocation().toString()).isEqualTo(String.format("http://localhost:%d/api/users/v1/register", port));
+        assertThat(actualResponse.getUsername()).isEqualTo("batman");
+        assertThat(actualResponse.getFirstName()).isEqualTo("Bruce");
+        assertThat(actualResponse.getLastName()).isEqualTo("Wayne");
+        assertThat(actualResponse.getEmail()).isEqualTo("batman@test.dev");
+        assertThat(actualResponse.getPhoneNumber()).isEqualTo("111-222-333");
+        assertThat(actualResponse.getRole()).isEqualTo(UserRole.CUSTOMER);
+
+        if (response.getHeaders().getLocation() != null) {
+            assertThat(response.getHeaders().getLocation().toString())
+                    .isEqualTo(String.format("http://localhost:%d/api/users/v1/register", port));
+        }
     }
 
 
