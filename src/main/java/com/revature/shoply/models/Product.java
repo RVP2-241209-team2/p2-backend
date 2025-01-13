@@ -21,6 +21,11 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    @ElementCollection
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "image_url")
+    private List<String> images;
+
     @Column(nullable = false)
     private double price;
 
@@ -33,10 +38,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(UUID id, String name, String description, double price, int quantity) {
+    public Product(UUID id, String name, String description, List<String> images, double price, int quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.images = images;
         this.price = price;
         this.quantity = quantity;
     }
@@ -87,5 +93,13 @@ public class Product {
 
     public void setTags(List<ProductTag> tags) {
         this.tags = tags;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }

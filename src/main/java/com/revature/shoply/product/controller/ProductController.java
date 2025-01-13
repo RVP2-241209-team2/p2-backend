@@ -43,6 +43,7 @@ public class ProductController {
                 id,
                 productDetails.getName(),
                 productDetails.getDescription(),
+                productDetails.getImages(),
                 productDetails.getPrice());
 
         return ResponseEntity.ok(updatedProduct);
