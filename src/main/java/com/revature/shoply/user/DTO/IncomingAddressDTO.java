@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.shoply.models.User;
 import com.revature.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 public class IncomingAddressDTO {
-
+    @Getter @Setter
+    private String recipientName;
     private String addressLine1;
     private String addressLine2;
     private String city;
@@ -20,7 +23,8 @@ public class IncomingAddressDTO {
     public IncomingAddressDTO() {
     }
 
-    public IncomingAddressDTO(String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
+    public IncomingAddressDTO(String recipientName, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
+        this.recipientName = recipientName;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;

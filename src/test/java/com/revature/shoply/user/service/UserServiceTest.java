@@ -128,8 +128,8 @@ public class UserServiceTest {
     public void addAddress_ValidData_ReturnsAddress() {
         UUID userId = UUID.randomUUID();
         User user = new User(UUID.randomUUID(), "testuser", "Test", "User",  "test@email.com", "password", "1234567890", UserRole.CUSTOMER);
-        IncomingAddressDTO incomingAddress = new IncomingAddressDTO("123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
-        Address address = new Address(UUID.randomUUID(), user, "123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
+        IncomingAddressDTO incomingAddress = new IncomingAddressDTO("Johnny Test","123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
+        Address address = new Address(UUID.randomUUID(), user,"Johnny Test", "123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
 
         when(userDAO.findById(userId)).thenReturn(Optional.of(user));
         when(addressDAO.save(any(Address.class))).thenReturn(address);
@@ -142,7 +142,7 @@ public class UserServiceTest {
     @Test
     public void addAddress_InvalidUserId_ThrowsException() {
         UUID userId = UUID.randomUUID();
-        IncomingAddressDTO incomingAddress = new IncomingAddressDTO("123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
+        IncomingAddressDTO incomingAddress = new IncomingAddressDTO("Johnny Test","123 Main St", "Apt 1", "City", "State", "12345", "USA", AddressType.BILLING);
 
         when(userDAO.findById(userId)).thenReturn(Optional.empty());
 
