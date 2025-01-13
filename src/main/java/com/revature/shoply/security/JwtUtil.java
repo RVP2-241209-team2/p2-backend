@@ -1,10 +1,12 @@
 package com.revature.shoply.security;
 
+import com.revature.shoply.config.Parameters;
 import com.revature.shoply.models.User;
 import com.revature.shoply.models.enums.UserRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +20,24 @@ public class JwtUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
+    private static String secret;
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private static Key SECRET_KEY;
+
+    @PostConstruct
+    public void init() {
+        this.secret = params.getSecret();
+        this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+
+    private final Parameters params;
+
+    public JwtUtil(Parameters params) {
+        this.params = params;
+    }
+
+
     private static final long expiration = (long) 24 * 60 * 60 * 1000; // 1 day
 
     public static String generateToken(User user) {

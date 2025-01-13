@@ -3,8 +3,6 @@ FROM openjdk:17-jdk-alpine
 # Set the working directory
 WORKDIR /app
 
-RUN mvn clean package
-
 # Copy the jar file to the working directory
 COPY target/shoply-0.0.1-SNAPSHOT.jar /app/shoply.jar
 
