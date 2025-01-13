@@ -67,9 +67,9 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteCustomerReview(String reviewId, UUID id) {
-        log.info("Deleting review: " + reviewId + " for user: " + id);
-        reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), id);
+    public void deleteCustomerReview(String reviewId, UUID user_id) {
+        log.info("Deleting review: " + reviewId + " for user: " + user_id);
+        reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), user_id);
 
     }
 
