@@ -30,7 +30,7 @@ public class ReviewService {
     }
 
     public Review createReview(ReviewDTO review) {
-        log.info("Creating review for product: " + review.getProductId());
+        log.info("Creating review for product: {}", review.getProductId());
 
         User user = userService.findUserByIdAndValidate(UUID.fromString(review.getUserId()));
         Product product = productService.getProductById(UUID.fromString(review.getProductId()));
@@ -55,12 +55,12 @@ public class ReviewService {
     }
 
     public List<Review> getReviewsByProduct(String productId) {
-        log.info("Getting reviews for product: " + productId);
+        log.info("Getting reviews for product: {}", productId);
         return reviewRepository.findAllByProduct_Id(UUID.fromString(productId));
     }
 
     public List<Review> getReviewsByCustomer(String userId) {
-        log.info("Getting reviews for user: " + userId);
+        log.info("Getting reviews for user");
         User user = userService.findUserByIdAndValidate(UUID.fromString(userId));
         return reviewRepository.findAllByUser_Id(user.getId());
     }
@@ -72,7 +72,7 @@ public class ReviewService {
 
     @Transactional
     public void deleteReview(String reviewId) {
-        log.info("Deleting review: " + reviewId);
+        log.info("Deleting review: {}", reviewId);
         reviewRepository.deleteById(UUID.fromString(reviewId));
     }
 
@@ -89,6 +89,8 @@ public class ReviewService {
     }
 
     public Review updateReview(String reviewId, ReviewDTO review) {
+        log.info("Updating review with id: {}", reviewId);
+
         Review oldReview = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(()
                 -> new RuntimeException("Review not found"));
         if (!review.getUserId().equals(oldReview.getUser().getId().toString())) {
