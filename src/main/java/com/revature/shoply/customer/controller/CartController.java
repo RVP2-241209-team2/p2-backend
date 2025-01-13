@@ -27,15 +27,21 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/RemoveItem/{cartItemId}")
-    public ResponseEntity<String> RemoveItemFromCart(@PathVariable UUID cartItemId){
+    @DeleteMapping("/remove/{cartItemId}")
+    public ResponseEntity<String> removeItemFromCart(@PathVariable UUID cartItemId){
         cartService.DeleteCartItemById(cartItemId);
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Cart> addToCart(@RequestBody IncomingCartItemDTO cartItemDTO, @RequestHeader("Authorization") String token){
         cartItemDTO.setUserId(UUID.fromString(jwtUtil.extractUserId(token)));
         return ResponseEntity.ok(cartService.addToCart(cartItemDTO));
+    }
+
+    @GetMapping
+    public ResponseEntity<Cart> viewCart(@RequestHeader("Authorization") String token) {
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
+        return ResponseEntity.ok(cartService.viewCart(userId));
     }
 }

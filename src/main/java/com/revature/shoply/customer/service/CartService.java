@@ -90,4 +90,11 @@ public class CartService {
 
         return cartDAO.save(cart);
     }
+
+    public Cart viewCart(UUID userId) {
+        User user = userDAO.findById(userId).orElseThrow(() ->
+                new RuntimeException("User not found"));
+        return cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
+                new RuntimeException("Cart not found"));
+    }
 }
