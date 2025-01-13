@@ -40,13 +40,13 @@ public class RegistrationControllerIntegrationTest {
 
         final ResponseEntity<UserRegistrationResponseDTO> response =
             template.postForEntity(
-                String.format("http://localhost:%d/shoply/api/user/v1/register", port),
-                "newRequestDTO",
+                String.format("http://localhost:%d/api/users/v1/register", port),
+                newRequestDTO,
                 UserRegistrationResponseDTO.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNull();
-        assertThat(response.getHeaders().getLocation().toString()).isEqualTo(String.format("http://localhost:%d/api/user/v1/register", port));
+        assertThat(response.getHeaders().getLocation().toString()).isEqualTo(String.format("http://localhost:%d/api/users/v1/register", port));
     }
 
 
