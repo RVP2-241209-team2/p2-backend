@@ -5,6 +5,8 @@ import com.revature.shoply.models.enums.AddressType;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,9 @@ public class Address {
     @JoinColumn(name="user_id")
     @JsonIgnore
     private User user;
+
+    @Column(nullable = false)
+    private String recipientName;
 
     @Column(nullable = false)
     private String addressLine1;
@@ -49,9 +54,10 @@ public class Address {
     public Address() {
     }
 
-    public Address(UUID id, User user, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
+    public Address(UUID id, User user, String recipientName, String addressLine1, String addressLine2, String city, String state, String zipCode, String country, AddressType type) {
         this.id = id;
         this.user = user;
+        this.recipientName = recipientName;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.city = city;
@@ -75,6 +81,14 @@ public class Address {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getRecipientName() {
+        return this.recipientName;
+    }
+
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
     }
 
     public String getAddressLine1() {
