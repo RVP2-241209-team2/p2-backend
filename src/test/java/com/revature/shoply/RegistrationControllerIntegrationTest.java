@@ -60,6 +60,26 @@ public class RegistrationControllerIntegrationTest {
         }
     }
 
+    @Test
+    public void registerUserWithInvalidEmailTest() {
+        UserRegistrationRequestDTO invalidRequest = new UserRegistrationRequestDTO(
+                "batman",
+                "Bruce",
+                "Wayne",
+                "invalid-email", // Invalid email
+                "asdf1234",
+                "111-222-333",
+                UserRole.CUSTOMER
+        );
+
+        ResponseEntity<String> response = template.postForEntity(
+                String.format("http://localhost:%d/api/users/v1/register", port),
+                invalidRequest,
+                String.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
 
 
 }
