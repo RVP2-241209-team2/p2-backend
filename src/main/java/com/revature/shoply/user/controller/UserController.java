@@ -26,7 +26,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Secured("ADMIN")
     @GetMapping("/all")
     public ResponseEntity<List<OutgoingUserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
