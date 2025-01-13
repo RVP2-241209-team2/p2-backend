@@ -6,6 +6,7 @@ import com.revature.shoply.models.User;
 import com.revature.shoply.product.service.ProductService;
 import com.revature.shoply.reviews.dto.ReviewDTO;
 import com.revature.shoply.user.service.UserService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -59,11 +60,13 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
+    @Transactional
     public void deleteReview(String reviewId) {
         log.info("Deleting review: " + reviewId);
         reviewRepository.deleteById(UUID.fromString(reviewId));
     }
 
+    @Transactional
     public void deleteCustomerReview(String reviewId, UUID id) {
         log.info("Deleting review: " + reviewId + " for user: " + id);
         reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), id);
@@ -73,7 +76,7 @@ public class ReviewService {
     public Review updateReview(String reviewId, ReviewDTO review) {
         Review oldReview = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(()
                 -> new RuntimeException("Review not found"));
-        if (review.getUserId() != oldReview.getUser().getId().toString()) {
+        if (!review.getUserId().equals(oldReview.getUser().getId().toString())) {
             throw new RuntimeException("User does not have permission to update this review");
         }
         oldReview.setTitle(review.getTitle());
