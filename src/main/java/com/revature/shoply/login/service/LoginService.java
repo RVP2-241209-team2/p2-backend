@@ -51,7 +51,7 @@ public class LoginService {
 
         User user = loginDAO.findByUsername(username);
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return new OutgoingLoginDTO(
                     user.getId(),
                     user.getUsername(),

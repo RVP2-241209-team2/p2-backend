@@ -175,6 +175,7 @@ public class UserService {
         Address newAddress = new Address(
                 null,
                 foundUser,
+                address.getRecipientName(),
                 address.getAddressLine1(),
                 address.getAddressLine2(),
                 address.getCity(),
@@ -197,6 +198,7 @@ public class UserService {
 
         Address newAddress = foundAddress.get();
 
+        newAddress.setRecipientName(address.getRecipientName());
         newAddress.setAddressLine1(address.getAddressLine1());
         newAddress.setAddressLine2(address.getAddressLine2());
         newAddress.setUser(foundUser);
