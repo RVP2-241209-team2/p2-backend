@@ -21,16 +21,13 @@ public class UserRegistrationService {
     }
 
     public UserRegistrationResponseDTO registerUser(UserRegistrationRequestDTO registrationRequestDTO) {
-        try {
-            validateRegistrationRequest(registrationRequestDTO);
-            checkForDuplicateFields(registrationRequestDTO);
-            User user = mapToUser(registrationRequestDTO);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            User savedUser = registrationDAO.save(user);
-            return mapToResponseDto(savedUser);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        validateRegistrationRequest(registrationRequestDTO);
+        checkForDuplicateFields(registrationRequestDTO);
+        User user = mapToUser(registrationRequestDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = registrationDAO.save(user);
+        return mapToResponseDto(savedUser);
+
     }
 
     private void validateRegistrationRequest(UserRegistrationRequestDTO registrationDto) {
