@@ -16,8 +16,8 @@ public class ReviewExceptionHandler {
     }
 
     @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNotAuthorizedException(ReviewNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("Not found", e.getMessage()));
+    public ResponseEntity<Map<String, String>> handleReviewNotFoundException(ReviewNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Map.of("No Content", e.getMessage()));
     }
 
 }

@@ -12,12 +12,12 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(AddressNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleAddressNotFoundException(AddressNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Address Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Address Not Found", e.getMessage());
     }
 
     @ExceptionHandler(PaymentMethodNotFoundException.class)
     public ResponseEntity<Map<String, String>> handlePaymentMethodNotFoundException(PaymentMethodNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Payment Method Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Payment Method Not Found", e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
