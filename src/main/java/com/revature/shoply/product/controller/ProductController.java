@@ -61,8 +61,9 @@ public class ProductController {
 
     @Secured("STORE_OWNER")
     @DeleteMapping("/{productId}")
-    public int removeProduct(@PathVariable UUID productId) {
-        return productService.removeProduct(productId);
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
+        productService.removeProduct(productId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
