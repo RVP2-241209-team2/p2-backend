@@ -1,5 +1,9 @@
 package com.revature.shoply.customer.service;
 
+import com.revature.shoply.customer.exceptions.CartNotFoundException;
+import com.revature.shoply.customer.exceptions.ItemNotFoundException;
+import com.revature.shoply.customer.exceptions.ProductNotFoundException;
+import com.revature.shoply.customer.exceptions.UserNotFoundException;
 import com.revature.shoply.repositories.CartDAO;
 import com.revature.shoply.product.repository.ProductDAO;
 import com.revature.shoply.repositories.CartItemDAO;
@@ -40,7 +44,7 @@ public class CartService {
     @Transactional
     public void deleteCartItemById(UUID cartItemId){
         CartItem item = cartItemDAO.findById(cartItemId).orElseThrow(() ->
-                new RuntimeException("No Item found"));
+                new ItemNotFoundException("No Item found"));
         item.setProduct(null);
         cartItemDAO.deleteById(cartItemId);
     }
@@ -53,7 +57,7 @@ public class CartService {
         }
 
         User user = userDAO.findById(cartItemDTO.getUserId()).orElseThrow(() -> {
-            throw new IllegalArgumentException("No user found with ID " + cartItemDTO.getUserId());
+            throw new UserNotFoundException("No user found with ID " + cartItemDTO.getUserId());
         });
 
         Cart cart = user.getCart();
@@ -67,7 +71,7 @@ public class CartService {
         }
 
         Product product = productDAO.findById(cartItemDTO.getProductId()).orElseThrow(() -> {
-           throw new IllegalArgumentException("No product found with ID " + cartItemDTO.getProductId());
+           throw new ProductNotFoundException("No product found with ID " + cartItemDTO.getProductId());
         });
 
         if (product.getQuantity() < cartItemDTO.getQuantity()) {
@@ -107,30 +111,30 @@ public class CartService {
 
     public Cart viewCart(UUID userId) {
         User user = userDAO.findById(userId).orElseThrow(() ->
-                new RuntimeException("User not found"));
+                new UserNotFoundException("User not found"));
         return cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
-                new RuntimeException("Cart not found"));
+                new CartNotFoundException("Cart not found"));
     }
 
     public List<CartItem> viewCartItems(UUID userId) {
         User user = userDAO.findById(userId).orElseThrow(() ->
-                new RuntimeException("User not found"));
+                new UserNotFoundException("User not found"));
 
         Cart cart = cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
-                new RuntimeException("Cart for user not found"));
+                new CartNotFoundException("Cart for user not found"));
 
         return cart.getCartItems();
     }
 
     public CartItem updateItemQuantity(IncomingCartItemDTO cartItemDTO) {
         User user = userDAO.findById(cartItemDTO.getUserId()).orElseThrow(() ->
-                new RuntimeException("No User Found"));
+                new UserNotFoundException("No User Found"));
 
         Cart cart = cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
-                new RuntimeException("No cart found"));
+                new CartNotFoundException("No cart found"));
 
         Product product = productDAO.findById(cartItemDTO.getProductId()).orElseThrow(() ->
-                new RuntimeException("Product not found"));
+                new ProductNotFoundException("Product not found"));
 
         CartItem existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(cartItemDTO.getProductId()))
@@ -143,13 +147,13 @@ public class CartService {
             updateCartTotal(cart);
             return cartItemDAO.save(existingItem);
         } else {
-            throw new RuntimeException("Item not found in cart");
+            throw new ItemNotFoundException("Item not found in cart");
         }
     }
 
     private void updateCartTotal(Cart cart) {
         Cart updatedCart = cartDAO.findById(cart.getId()).orElseThrow(() ->
-                new RuntimeException("No Cart found"));
+                new CartNotFoundException("No Cart found"));
 
         double sum = cart.getCartItems().stream()
                 .mapToDouble(CartItem::getTotal)
