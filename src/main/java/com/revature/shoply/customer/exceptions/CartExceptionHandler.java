@@ -17,17 +17,17 @@ public class CartExceptionHandler {
 
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleCartItemNotFoundException(ItemNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Cart Item Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Cart Item Not Found", e.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "User Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "User Not Found", e.getMessage());
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleProductNotFoundException(ProductNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Product Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Product Not Found", e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
