@@ -30,7 +30,7 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @Secured("STORE_OWNER")
+    @Secured({"STORE_OWNER", "ADMIN"})
     @GetMapping("/all")
     ResponseEntity<List<OutgoingUserDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
