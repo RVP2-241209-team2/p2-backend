@@ -4,6 +4,9 @@ import com.revature.shoply.models.Address;
 import com.revature.shoply.models.PaymentDetails;
 import com.revature.shoply.models.User;
 import com.revature.shoply.user.DTO.*;
+import com.revature.shoply.user.exception.AddressNotFoundException;
+import com.revature.shoply.user.exception.PaymentMethodNotFoundException;
+import com.revature.shoply.user.exception.UniqueConstraintViolationException;
 import com.revature.shoply.user.repository.AddressDAO;
 import com.revature.shoply.user.repository.PaymentMethodDAO;
 import com.revature.shoply.repositories.UserDAO;
@@ -57,7 +60,7 @@ public class UserService {
             throw new IllegalArgumentException("Address ID cannot be null");
         Optional<Address> foundAddress = addressDAO.findById(addressId);
         if (foundAddress.isEmpty())
-            throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
+            throw new AddressNotFoundException("No Address found with AddressID: " + addressId);
 
         return foundAddress.get();
     }
@@ -67,7 +70,7 @@ public class UserService {
             throw new IllegalArgumentException("Payment Method ID cannot be null");
         Optional<PaymentDetails> foundPayMethod = paymentMethodDAO.findById(payMethodId);
         if (foundPayMethod.isEmpty())
-            throw new IllegalArgumentException("No Payment Method found with Payment Method ID: " + payMethodId);
+            throw new PaymentMethodNotFoundException("No Payment Method found with Payment Method ID: " + payMethodId);
 
         return foundPayMethod.get();
     }
@@ -111,7 +114,7 @@ public class UserService {
 
         User usernameCheck = userDAO.findByUsername(incomingUser.getUsername());
         if (usernameCheck != null && usernameCheck.getId() != userId) {
-            throw new IllegalArgumentException(
+            throw new UniqueConstraintViolationException(
                     "Username " + incomingUser.getUsername() + " is already taken. Try a different username");
         }
 
@@ -194,7 +197,7 @@ public class UserService {
             throw new IllegalArgumentException("Address ID cannot be null");
         Optional<Address> foundAddress = addressDAO.findById(addressId);
         if (foundAddress.isEmpty())
-            throw new IllegalArgumentException("No Address found with AddressID: " + addressId);
+            throw new AddressNotFoundException("No Address found with AddressID: " + addressId);
 
         Address newAddress = foundAddress.get();
 
