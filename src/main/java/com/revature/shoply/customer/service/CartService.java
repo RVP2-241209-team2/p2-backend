@@ -2,6 +2,7 @@ package com.revature.shoply.customer.service;
 
 import com.revature.shoply.repositories.CartDAO;
 import com.revature.shoply.product.repository.ProductDAO;
+import com.revature.shoply.repositories.CartItemDAO;
 import com.revature.shoply.repositories.UserDAO;
 import com.revature.shoply.models.Cart;
 import com.revature.shoply.models.CartItem;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,12 +26,14 @@ public class CartService {
     private final CartDAO cartDAO;
     private final ProductDAO productDAO;
     private final UserDAO userDAO;
+    private final CartItemDAO cartItemDAO;
 
     @Autowired
-    public CartService(CartDAO cartDAO, ProductDAO productDAO, UserDAO userDAO) {
+    public CartService(CartDAO cartDAO, ProductDAO productDAO, UserDAO userDAO, CartItemDAO cartItemDAO) {
         this.cartDAO = cartDAO;
         this.productDAO = productDAO;
         this.userDAO = userDAO;
+        this.cartItemDAO = cartItemDAO;
     }
 
     public void DeleteCartItemById(UUID cartItemId){
@@ -101,5 +105,38 @@ public class CartService {
                 new RuntimeException("User not found"));
         return cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
                 new RuntimeException("Cart not found"));
+    }
+
+    public List<CartItem> viewCartItems(UUID userId) {
+        User user = userDAO.findById(userId).orElseThrow(() ->
+                new RuntimeException("User not found"));
+
+        Cart cart = cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
+                new RuntimeException("Cart for user not found"));
+
+        return cart.getCartItems();
+    }
+
+    public CartItem updateItemQuantity(IncomingCartItemDTO cartItemDTO) {
+        User user = userDAO.findById(cartItemDTO.getUserId()).orElseThrow(() ->
+                new RuntimeException("No User Found"));
+
+        Cart cart = cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
+                new RuntimeException("No cart found"));
+
+        Product product = productDAO.findById(cartItemDTO.getProductId()).orElseThrow(() ->
+                new RuntimeException("Product not found"));
+
+        CartItem existingItem = cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getId().equals(cartItemDTO.getProductId()))
+                .findFirst()
+                .orElse(null);
+
+        if (existingItem != null) {
+            existingItem.setQuantity(existingItem.getQuantity() + cartItemDTO.getQuantity());
+            return cartItemDAO.save(existingItem);
+        } else {
+            throw new RuntimeException("Item not found in cart");
+        }
     }
 }
