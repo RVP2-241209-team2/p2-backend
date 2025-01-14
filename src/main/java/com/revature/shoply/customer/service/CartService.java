@@ -9,6 +9,7 @@ import com.revature.shoply.models.CartItem;
 import com.revature.shoply.customer.DTOs.IncomingCartItemDTO;
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.User;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,12 @@ public class CartService {
         this.cartItemDAO = cartItemDAO;
     }
 
-    public void DeleteCartItemById(UUID cartItemId){
-        cartDAO.deleteById(cartItemId);
+    @Transactional
+    public void deleteCartItemById(UUID cartItemId){
+        CartItem item = cartItemDAO.findById(cartItemId).orElseThrow(() ->
+                new RuntimeException("No Item found"));
+        item.setProduct(null);
+        cartItemDAO.deleteById(cartItemId);
     }
 
     public Cart addToCart(IncomingCartItemDTO cartItemDTO) {
@@ -135,9 +140,22 @@ public class CartService {
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartItemDTO.getQuantity());
             existingItem.setTotal(product.getPrice() * existingItem.getQuantity());
+            updateCartTotal(cart);
             return cartItemDAO.save(existingItem);
         } else {
             throw new RuntimeException("Item not found in cart");
         }
+    }
+
+    private void updateCartTotal(Cart cart) {
+        Cart updatedCart = cartDAO.findById(cart.getId()).orElseThrow(() ->
+                new RuntimeException("No Cart found"));
+
+        double sum = cart.getCartItems().stream()
+                .mapToDouble(CartItem::getTotal)
+                .sum();
+
+        updatedCart.setTotal(sum);
+        cartDAO.save(updatedCart);
     }
 }

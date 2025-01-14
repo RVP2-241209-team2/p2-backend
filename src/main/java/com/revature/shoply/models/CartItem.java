@@ -1,5 +1,7 @@
 package com.revature.shoply.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cart_id")
+    @JsonIgnoreProperties("cartItems")
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.EAGER)

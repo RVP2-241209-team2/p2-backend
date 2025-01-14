@@ -32,7 +32,7 @@ public class CartController {
 
     @DeleteMapping("/remove/{cartItemId}")
     public ResponseEntity<String> removeItemFromCart(@PathVariable UUID cartItemId){
-        cartService.DeleteCartItemById(cartItemId);
+        cartService.deleteCartItemById(cartItemId);
         return ResponseEntity.ok(null);
     }
 
