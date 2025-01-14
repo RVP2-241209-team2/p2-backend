@@ -7,6 +7,7 @@ import com.revature.shoply.user.DTO.*;
 import com.revature.shoply.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -27,6 +28,12 @@ public class UserController {
     public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+    }
+
+    @Secured({"STORE_OWNER", "ADMIN"})
+    @GetMapping("/all")
+    ResponseEntity<List<OutgoingUserDTO>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/my-info")

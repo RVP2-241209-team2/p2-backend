@@ -40,7 +40,7 @@ public class UserService {
                         user.getLastName(),
                         user.getPhoneNumber(),
                         user.getRole()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public User findUserByIdAndValidate(UUID userId) {
