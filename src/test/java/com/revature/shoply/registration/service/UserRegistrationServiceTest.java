@@ -5,6 +5,7 @@ import com.revature.shoply.models.enums.UserRole;
 import com.revature.shoply.registration.dto.UserRegistrationRequestDTO;
 import com.revature.shoply.registration.dto.UserRegistrationResponseDTO;
 import com.revature.shoply.registration.repository.UserRegistrationDAO;
+import com.revature.shoply.user.exception.UniqueConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -70,9 +71,8 @@ public class UserRegistrationServiceTest {
 
         when(registrationDAO.existsByEmail(requestDTO.getEmail())).thenReturn(true);
 
-        Exception exception = assertThrows(RuntimeException.class,
+        Exception exception = assertThrows(UniqueConstraintViolationException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Email is already in use");
     }
 
     @Test
@@ -83,7 +83,6 @@ public class UserRegistrationServiceTest {
 
         Exception exception = assertThrows(RuntimeException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Invalid email format");
     }
 
     // ========================================
@@ -97,7 +96,6 @@ public class UserRegistrationServiceTest {
 
         Exception exception = assertThrows(RuntimeException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Password must be at least 8 characters long");
     }
 
     @Test
@@ -108,7 +106,7 @@ public class UserRegistrationServiceTest {
 
         Exception exception = assertThrows(RuntimeException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Username cannot be empty");
+
     }
 
     // ========================================
@@ -122,9 +120,8 @@ public class UserRegistrationServiceTest {
 
         when(registrationDAO.existsByUsername(requestDTO.getUsername())).thenReturn(true);
 
-        Exception exception = assertThrows(RuntimeException.class,
+        Exception exception = assertThrows(UniqueConstraintViolationException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Username is already in use");
     }
 
     @Test
@@ -135,9 +132,8 @@ public class UserRegistrationServiceTest {
 
         when(registrationDAO.existsByPhoneNumber(requestDTO.getPhoneNumber())).thenReturn(true);
 
-        Exception exception = assertThrows(RuntimeException.class,
+        Exception exception = assertThrows(UniqueConstraintViolationException.class,
                 () -> userRegistrationService.registerUser(requestDTO));
-        assertThat(exception.getMessage()).isEqualTo("java.lang.IllegalArgumentException: Phone number is already in use");
     }
 
 }

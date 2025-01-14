@@ -6,6 +6,7 @@ import com.revature.shoply.models.User;
 import com.revature.shoply.models.enums.AddressType;
 import com.revature.shoply.models.enums.UserRole;
 import com.revature.shoply.user.DTO.*;
+import com.revature.shoply.user.exception.UniqueConstraintViolationException;
 import com.revature.shoply.user.repository.AddressDAO;
 import com.revature.shoply.user.repository.PaymentMethodDAO;
 import com.revature.shoply.repositories.UserDAO;
@@ -102,7 +103,7 @@ public class UserServiceTest {
         when(userDAO.findById(userId)).thenReturn(Optional.of(user));
         when(userDAO.findByUsername("duplicateuser")).thenReturn(new User());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> userService.updateUser(userId, incomingUserDTO));
+        Exception exception = assertThrows(UniqueConstraintViolationException.class, () -> userService.updateUser(userId, incomingUserDTO));
         assertThat(exception.getMessage()).contains("Username duplicateuser is already taken");
     }
 
