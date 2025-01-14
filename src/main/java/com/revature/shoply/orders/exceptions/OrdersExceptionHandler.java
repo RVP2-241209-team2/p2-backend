@@ -12,7 +12,7 @@ public class OrdersExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleOrderNotFoundException(OrderNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Order Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Order Not Found", e.getMessage());
     }
 
     @ExceptionHandler(UnauthorizedUserActionException.class)

@@ -12,7 +12,7 @@ public class TagExceptionHandler {
 
     @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTagNotFoundException(TagNotFoundException e) {
-        return createResponse(HttpStatus.NOT_FOUND, "Tag Not Found", e.getMessage());
+        return createResponse(HttpStatus.NO_CONTENT, "Tag Not Found", e.getMessage());
     }
 
     private ResponseEntity<Map<String, String>> createResponse(HttpStatus status, String error, String message) {
