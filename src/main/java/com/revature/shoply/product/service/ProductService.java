@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.revature.shoply.customer.exceptions.ProductNotFoundException;
 import com.revature.shoply.product.DTO.IncomingProductDTO;
 import com.revature.shoply.product.exception.ProductRegistrationException;
 import com.revature.shoply.product.repository.ProductDAO;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,15 +73,15 @@ public class ProductService {
         return null;
     }
 
-    public int removeProduct(UUID productId) {
+    @Transactional
+    public void removeProduct(UUID productId) {
         // 1. ensure product exists
         Optional<Product> existingProduct = productDAO.findById(productId);
-        if (existingProduct.isPresent()) {
-            // 2. delete
+        if (existingProduct.isEmpty()) {
+            throw new ProductNotFoundException("Product not found with id: " + productId);
+        } else {
             productDAO.deleteById(productId);
-            return 1;
-        } else
-            return 0;
+        }
     }
 
     public List<Product> findProductsBySimilarName(String name) {
@@ -91,7 +93,7 @@ public class ProductService {
         if (product.isPresent()) {
             return product.get();
         } else {
-            throw new RuntimeException("Product not found with id: " + id);
+            throw new ProductNotFoundException("Product not found with id: " + id);
         }
     }
 }
