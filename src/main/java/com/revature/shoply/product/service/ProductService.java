@@ -51,7 +51,6 @@ public class ProductService {
             throw new ProductRegistrationException("Invalid product details");
         }
 
-
         Optional<Product> existingProduct = productDAO.findByName(productDTO.getName());
         if (existingProduct.isPresent()) {
             throw new ProductRegistrationException("Product already exists with name: " + productDTO.getName());
@@ -71,15 +70,14 @@ public class ProductService {
         return null;
     }
 
-    public int removeProduct(UUID productId) {
+    public void removeProduct(UUID productId) {
         // 1. ensure product exists
         Optional<Product> existingProduct = productDAO.findById(productId);
-        if (existingProduct.isPresent()) {
-            // 2. delete
-            productDAO.deleteById(productId);
-            return 1;
-        } else
-            return 0;
+        if (!existingProduct.isPresent()) {
+            throw new RuntimeException("Product not found");
+        }
+        // 2. delete
+        productDAO.deleteById(productId);
     }
 
     public List<Product> findProductsBySimilarName(String name) {

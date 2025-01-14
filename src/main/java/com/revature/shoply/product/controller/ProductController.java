@@ -7,12 +7,6 @@ import com.revature.shoply.product.DTO.IncomingProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import com.revature.shoply.models.Product;
@@ -53,7 +47,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.addProduct(productDTO));
     }
 
-
     @GetMapping("/tag/{name}")
     public ResponseEntity<List<Product>> getProductsByTag(@PathVariable String name) {
         return ResponseEntity.ok(productService.getProductsByTag(name));
@@ -61,18 +54,23 @@ public class ProductController {
 
     @Secured("STORE_OWNER")
     @DeleteMapping("/{productId}")
-    public int removeProduct(@PathVariable UUID productId) {
-        return productService.removeProduct(productId);
+    public ResponseEntity<Void> removeProduct(@PathVariable UUID productId) {
+        try {
+            productService.removeProduct(productId);
+            return ResponseEntity.noContent().build(); // Returns 204 No Content
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build(); // Returns 404 Not Found
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts(){
+    public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable UUID productId){
+    public ResponseEntity<Product> getProductById(@PathVariable UUID productId) {
         Product product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
