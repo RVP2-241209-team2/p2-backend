@@ -1,5 +1,6 @@
 package com.revature.shoply.login.exception;
 
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,4 +29,5 @@ public class LoginExceptionHandler {
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
+
 }
