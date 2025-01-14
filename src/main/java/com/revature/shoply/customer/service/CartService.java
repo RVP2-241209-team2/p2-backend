@@ -134,6 +134,7 @@ public class CartService {
 
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + cartItemDTO.getQuantity());
+            existingItem.setTotal(product.getPrice() * existingItem.getQuantity());
             return cartItemDAO.save(existingItem);
         } else {
             throw new RuntimeException("Item not found in cart");
