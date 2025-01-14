@@ -3,6 +3,8 @@ package com.revature.shoply.orders;
 import com.revature.shoply.models.*;
 import com.revature.shoply.models.enums.OrderStatus;
 import com.revature.shoply.orders.dto.CreateOrderDTO;
+import com.revature.shoply.orders.exceptions.OrderNotFoundException;
+import com.revature.shoply.orders.exceptions.UnauthorizedUserActionException;
 import com.revature.shoply.repositories.OrderItemRepository;
 import com.revature.shoply.repositories.OrderRepository;
 import com.revature.shoply.product.service.ProductService;
@@ -43,18 +45,18 @@ public class OrderService {
                 new RuntimeException("Order with id {} not found" + orderId));
 
         if (!order.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Order with id {}, does not belong to user with id {}" + orderId + userId);
+            throw new UnauthorizedUserActionException("Order with id {}, does not belong to user with id {}" + orderId + userId);
         }
         return orderRepository.findById(orderId).orElseThrow(() ->
-                new RuntimeException("Order with id " + orderId + " not found"));
+                new OrderNotFoundException("Order not found"));
     }
 
     public Order cancelOrder(UUID userId, UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() ->
-                new RuntimeException("Order with id {} not found" + orderId));
+                new OrderNotFoundException("Order with id {} not found" + orderId));
 
         if (!order.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Order with id {}, does not belong to user with id {}" + orderId + userId);
+            throw new UnauthorizedUserActionException("Order with id {}, does not belong to user with id {}" + orderId + userId);
         }
         order.setStatus(OrderStatus.CANCELLED);
         return orderRepository.save(order);

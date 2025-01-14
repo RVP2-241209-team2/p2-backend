@@ -4,6 +4,7 @@ import com.revature.shoply.models.User;
 import com.revature.shoply.registration.dto.UserRegistrationRequestDTO;
 import com.revature.shoply.registration.dto.UserRegistrationResponseDTO;
 import com.revature.shoply.registration.repository.UserRegistrationDAO;
+import com.revature.shoply.user.exception.UniqueConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -58,13 +59,13 @@ public class UserRegistrationService {
 
     private void checkForDuplicateFields(UserRegistrationRequestDTO registrationDto) {
         if (registrationDAO.existsByEmail(registrationDto.getEmail())) {
-            throw new IllegalArgumentException("Email is already in use");
+            throw new UniqueConstraintViolationException("Email is already in use");
         }
         if (registrationDAO.existsByPhoneNumber(registrationDto.getPhoneNumber())) {
-            throw new IllegalArgumentException("Phone number is already in use");
+            throw new UniqueConstraintViolationException("Phone number is already in use");
         }
         if (registrationDAO.existsByUsername(registrationDto.getUsername())) {
-            throw new IllegalArgumentException("Username is already in use");
+            throw new UniqueConstraintViolationException("Username is already in use");
         }
     }
 
