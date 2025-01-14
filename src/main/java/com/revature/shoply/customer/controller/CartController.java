@@ -59,4 +59,11 @@ public class CartController {
         cartItemDTO.setUserId(UUID.fromString(jwtUtil.extractUserId(token.substring(7))));
         return ResponseEntity.ok(cartService.updateItemQuantity(cartItemDTO));
     }
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearCart(@RequestHeader("Authorization") String token) {
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token.substring(7)));
+        cartService.clearCart(userId);
+        return ResponseEntity.ok(null);
+    }
 }

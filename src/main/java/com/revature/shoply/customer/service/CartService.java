@@ -162,4 +162,17 @@ public class CartService {
         updatedCart.setTotal(sum);
         cartDAO.save(updatedCart);
     }
+
+    @Transactional
+    public void clearCart(UUID userId) {
+        User user = userDAO.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User not found"));
+
+        Cart cart = cartDAO.findById(user.getCart().getId()).orElseThrow(() ->
+                new CartNotFoundException("Cart not found"));
+
+        cart.getCartItems().clear();
+        cart.setTotal(0.0);
+        cartDAO.save(cart);
+    }
 }
