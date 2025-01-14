@@ -3,10 +3,11 @@ package com.revature.shoply.reviews;
 import com.revature.shoply.models.Product;
 import com.revature.shoply.models.Review;
 import com.revature.shoply.models.User;
+import com.revature.shoply.orders.exceptions.UnauthorizedUserActionException;
 import com.revature.shoply.product.service.ProductService;
 import com.revature.shoply.repositories.ReviewRepository;
 import com.revature.shoply.reviews.dto.ReviewDTO;
-import com.revature.shoply.reviews.exceptions.NotAuthorizedException;
+import com.revature.shoply.reviews.exceptions.ReviewNotFoundException;
 import com.revature.shoply.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -81,9 +82,9 @@ public class ReviewService {
     public void deleteCustomerReview(String reviewId, UUID user_id) {
         log.info("Deleting review: {}", reviewId);
         Review review = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(() ->
-                new RuntimeException("Review not found"));
+                new ReviewNotFoundException("Review not found"));
         if (!review.getUser().getId().equals(user_id)) {
-            throw new NotAuthorizedException("User does not have permission to delete this review");
+            throw new UnauthorizedUserActionException("User does not have permission to delete this review");
         }
         reviewRepository.deleteByIdAndUser_Id(UUID.fromString(reviewId), user_id);
 
@@ -93,9 +94,9 @@ public class ReviewService {
         log.info("Updating review with id: {}", reviewId);
 
         Review oldReview = reviewRepository.findById(UUID.fromString(reviewId)).orElseThrow(()
-                -> new RuntimeException("Review not found"));
+                -> new ReviewNotFoundException("Review not found"));
         if (!review.getUserId().equals(oldReview.getUser().getId().toString())) {
-            throw new NotAuthorizedException("User does not have permission to update this review");
+            throw new UnauthorizedUserActionException("User does not have permission to update this review");
         }
         oldReview.setTitle(review.getTitle());
         oldReview.setDescription(review.getDescription());

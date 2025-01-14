@@ -11,8 +11,7 @@ public class IncomingCartItemDTO {
     public IncomingCartItemDTO() {
     }
 
-    public IncomingCartItemDTO(UUID userId, UUID productId, int quantity) {
-        this.userId = userId;
+    public IncomingCartItemDTO(UUID productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
